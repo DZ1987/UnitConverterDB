@@ -1,4 +1,15 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿window.onload = function () {
+    // Only call if on the "Edit" page.
+    if (window.location.href.includes("/Edit/")) {
+        countChars(document.getElementById("userTextArea"));
+    }
+};
 
-// Write your JavaScript code.
+/**
+ * Counts how many characters there are in the <textarea>
+ * and displays it.
+ */
+function countChars(input) {
+    let charCount = input.value.length;
+    document.getElementById("charCount").innerText = charCount + "/1000";
+}
