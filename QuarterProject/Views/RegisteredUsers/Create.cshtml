@@ -9,22 +9,20 @@
 <h4>RegisteredUser</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="UserText" class="control-label"></label>
-                <input asp-for="UserText" class="form-control" />
+                <textarea asp-for="UserText" class="form-control text-input"></textarea>
                 <span asp-validation-for="UserText" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
+            <!-- Sets "UserName" to the User Identity Name -->
+            <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
         </form>
     </div>
 </div>
@@ -34,5 +32,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
