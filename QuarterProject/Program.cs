@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuarterProject.Data;
+using QuarterProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,5 +62,9 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+IServiceScope serviceProvider = app.Services.GetRequiredService<IServiceProvider>().CreateScope();
+// Create default roles
+await IdentityHelper.CreateRoles(serviceProvider.ServiceProvider, IdentityHelper.RegisteredUser);
 
 app.Run();
