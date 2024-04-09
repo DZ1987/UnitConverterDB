@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using QuarterProject.Models;
 
 namespace QuarterProject.Data
 {
@@ -9,5 +10,7 @@ namespace QuarterProject.Data
             : base(options)
         {
         }
+
+        public DbSet<RegisteredUser> RegisteredUser { get; set; }
     }
 }

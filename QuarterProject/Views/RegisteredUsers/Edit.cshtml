@@ -1,0 +1,37 @@
+﻿@model QuarterProject.Models.RegisteredUser
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>RegisteredUser</h4>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
+            <div class="form-group">
+                <label asp-for="UserText" class="control-label"></label>
+                <textarea asp-for="UserText" class="form-control text-input"></textarea>
+                <span asp-validation-for="UserText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
