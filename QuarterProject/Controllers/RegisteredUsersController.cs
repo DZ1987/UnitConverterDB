@@ -24,7 +24,10 @@ namespace QuarterProject.Controllers
         // GET: RegisteredUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.RegisteredUser.ToListAsync());
+            string? UserIdentityName = @User.Identity?.Name; // The Users Identity Name
+
+            // Displays only the UserText of whoever is currently Logged In
+            return View(await _context.RegisteredUser.Where(r => r.UserName == UserIdentityName).ToListAsync());
         }
 
         // GET: RegisteredUsers/Details/5
