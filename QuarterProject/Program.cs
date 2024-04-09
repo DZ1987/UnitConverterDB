@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -66,5 +67,8 @@ app.MapRazorPages();
 IServiceScope serviceProvider = app.Services.GetRequiredService<IServiceProvider>().CreateScope();
 // Create default roles
 await IdentityHelper.CreateRoles(serviceProvider.ServiceProvider, IdentityHelper.RegisteredUser);
+
+// Create default user
+await IdentityHelper.CreateDefaultUser(serviceProvider.ServiceProvider, IdentityHelper.RegisteredUser);
 
 app.Run();
