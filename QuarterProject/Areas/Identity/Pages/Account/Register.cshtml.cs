@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using QuarterProject.Models;
 
 namespace QuarterProject.Areas.Identity.Pages.Account
 {
@@ -125,6 +126,8 @@ namespace QuarterProject.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    // Adds new accounts to the RegisteredUser role
+                    await _userManager.AddToRoleAsync(user, IdentityHelper.RegisteredUser);
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
