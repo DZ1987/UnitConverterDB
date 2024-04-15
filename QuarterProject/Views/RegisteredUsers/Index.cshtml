@@ -18,18 +18,20 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="_border">
         @foreach (var item in Model)
         {
-            <tr>
-                <td class="col-1 border-right">
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><br>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a><br>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+            <tr class="_border-top">
                 <td>
                     <!-- Preserves whitespace and newlines when displaying. -->
                     <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
