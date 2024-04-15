@@ -17,6 +17,10 @@ body {
     margin-bottom: 60px;
 }
 
+textarea {
+    font-family: monospace;
+}
+
 .back-to-top {
     float: right;
 }

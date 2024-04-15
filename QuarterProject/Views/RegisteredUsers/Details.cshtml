@@ -10,11 +10,14 @@
     <h4>RegisteredUser</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UserText)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserText)
+        <br>
+        <dd class="col-sm-10">
+            <textarea readonly asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="countChars(this)">
+            <pre>@Html.DisplayFor(model => model.UserText)</pre>
+            </textarea>
         </dd>
     </dl>
 </div>
