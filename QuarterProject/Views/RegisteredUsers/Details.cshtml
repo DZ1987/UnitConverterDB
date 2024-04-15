@@ -18,6 +18,10 @@
             <textarea readonly asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="countChars(this)">
             <pre>@Html.DisplayFor(model => model.UserText)</pre>
             </textarea>
+            <div class="_display-inline">
+                <p id="charCount"></p>
+                <p id="maxChars"></p>
+            </div>
         </dd>
     </dl>
 </div>

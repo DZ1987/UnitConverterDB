@@ -34,3 +34,7 @@ textarea {
 .border-right {
     border-right: 1px solid black;
 }
+
+._display-inline {
+    display: inline-flex;
+}
