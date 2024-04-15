@@ -17,7 +17,10 @@
             <div class="form-group">
                 <label asp-for="UserText" class="control-label"></label>
                 <textarea asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="countChars(this)"></textarea>
-                <p id="charCount"></p>
+                <div class="_display-inline">
+                    <p id="charCount"></p>
+                    <p id="maxChars"></p>
+                </div>
                 <span asp-validation-for="UserText" class="text-danger"></span>
             </div>
             <div class="form-group">
