@@ -42,3 +42,7 @@ textarea {
 ._display-inline {
     display: inline-flex;
 }
+
+._letter-spacing {
+    margin-left: 5px;
+}
