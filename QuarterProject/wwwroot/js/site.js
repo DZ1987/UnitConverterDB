@@ -5,12 +5,13 @@ const iconPrivacyElement = document.getElementById("icon-privacy");
 const iconRegisteredUsersElement = document.getElementById("icon-registeredUsers");
 const userStateElement = document.getElementById("userState").textContent;
 const userTextAreaElement = document.getElementById("userTextArea");
-const charCountElement = document.getElementById("charCount");
 const maxCharsElement = document.getElementById("maxChars");
+const charCountElement = document.getElementById("charCount");
+const wordCountElement = document.getElementById("wordCount");
 
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
-    isCountCharsSupported();
+    isCharInputSupported();
 });
 
 /**
@@ -30,9 +31,9 @@ function updateIconsPath() {
 }
 
 /**
- * If the page supports the countChars() function, call the function.
+ * If the page supports the charInput() function, call the function.
  */
-function isCountCharsSupported() {
+function isCharInputSupported() {
     const VALID_PAGES = ["/Create", "/Edit/", "/Details/"];
 
     let validPage = Array.from(VALID_PAGES).some(p => window.location.href.includes(p));
@@ -40,14 +41,24 @@ function isCountCharsSupported() {
     // Only call if on the Create, Edit or Details pages.
     if (validPage) {
         maxCharsElement.textContent = `/${MAX_CHARACTERS}`;
-        countChars(userTextAreaElement);
+        charInput(userTextAreaElement);
     }
 }
 
 /**
- * Counts how many characters there are in the <textarea> and displays it.
+ * Counts how many characters and words there are in the <textarea> and displays it.
  */
-function countChars(input) {
-    let charCount = input.value.length;
+function charInput(input) {
+    const inputChar = input.value;
+    const charCount = inputChar.length;
+
+    // Split the input into words using space as the separator.
+    const words = inputChar.trim().split(/\s+/);
+
+    // If there are no words, set to 0 otherwise return the length.
+    const wordCount = words[0] === "" ? 0 : words.length;
+
+    // Display the results.
     charCountElement.textContent = `${charCount}`;
+    wordCountElement.textContent = `${wordCount}`;
 }

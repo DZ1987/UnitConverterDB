@@ -16,10 +16,16 @@
             <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
             <div class="form-group">
                 <label asp-for="UserText" class="control-label"></label>
-                <textarea asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="countChars(this)"></textarea>
+                <textarea asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="charInput(this)"></textarea>
                 <div class="_display-inline">
                     <p id="charCount"></p>
                     <p id="maxChars"></p>
+                    <p class="_letter-spacing">Characters</p>
+                </div>
+                <br>
+                <div class="_display-inline">
+                    <p id="wordCount"></p>
+                    <p class="_letter-spacing">Words</p>
                 </div>
                 <span asp-validation-for="UserText" class="text-danger"></span>
             </div>
