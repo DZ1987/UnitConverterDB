@@ -46,3 +46,7 @@ textarea {
 ._letter-spacing {
     margin-left: 5px;
 }
+
+pre {
+    white-space: pre-wrap;
+}
