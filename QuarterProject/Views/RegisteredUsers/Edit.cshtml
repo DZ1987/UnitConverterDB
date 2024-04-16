@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
             <div class="form-group">
                 <label asp-for="UserText" class="control-label"></label>
-                <textarea asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="charInput(this)"></textarea>
+                <textarea asp-for="UserText" id="userTextArea" class="form-control text-input"></textarea>
                 <div class="_display-inline">
                     <p id="charCount"></p>
                     <p id="maxChars"></p>
