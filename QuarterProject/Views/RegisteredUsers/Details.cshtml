@@ -14,7 +14,7 @@
             @Html.DisplayNameFor(model => model.UserText)
         </dt>
         <br>
-        <dd class="col-sm-10">
+        <dd>
             <textarea readonly asp-for="UserText" id="userTextArea" class="form-control text-input" oninput="charInput(this)">
             <pre>@Html.DisplayFor(model => model.UserText)</pre>
             </textarea>
