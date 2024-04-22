@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ConvertTemperature>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="_display-block-ruby">
+    <h3>Convert the <span style="color: green">Selected Temperature</span></h3>
+</div>
+<div class="_display-block-ruby">
+    <input id="input1" class="_border-green" oninput="convertTemperature(1)">
+    <select id="temperatureName1" class="_border-green" onchange="convertTemperature(1)">
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+    <p>=</p>
+    <input id="input2" class="_border-black" disabled>
+    <select id="temperatureName2" class="_border-black" onchange="convertTemperature(1)">
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+</div>
+
+<div class="_display-block-ruby">
+    <p>Formula: </p>
+    <p id="formula"></p>
+</div>
+<div class="_display-block-ruby">
+    <p>Result: </p>
+    <p id="conversion"></p>
+    <p id="result"></p>
+</div>
+
+<button id="clearButton" class="btn btn-danger">Clear Input</button>
+
+<div class="_invisible">
+    @foreach (var item in Model)
+    {
+        <input id="@Html.DisplayFor(modelItem => item.TemperatureConversion)" value="@Html.DisplayFor(modelItem => item.TemperatureFormula)">
+        <label>@Html.DisplayFor(modelItem => item.TemperatureConversion)</label>
+        <br>
+    }
+</div>

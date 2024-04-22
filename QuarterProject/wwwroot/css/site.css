@@ -50,3 +50,19 @@ textarea {
 pre {
     white-space: pre-wrap;
 }
+
+._invisible {
+    display: none;
+}
+
+._display-block-ruby {
+    display: block ruby;
+}
+
+._border-black {
+    border: 2px solid black;
+}
+
+._border-green {
+    border: 2px solid green;
+}
