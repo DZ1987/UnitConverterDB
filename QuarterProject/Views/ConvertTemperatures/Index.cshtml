@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuarterProject.Models.ConvertTemperature>
+﻿@model IEnumerable<ConvertTemperature>
 
 @{
     ViewData["Title"] = "Index";
@@ -36,6 +36,8 @@
     <p id="conversion"></p>
     <p id="result"></p>
 </div>
+
+<button id="clearButton" class="btn btn-danger">Clear Input</button>
 
 <div class="_invisible">
     @foreach (var item in Model)

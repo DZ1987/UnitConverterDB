@@ -180,4 +180,8 @@ function convertTemperature(n) {
         displayFormulaElement.textContent = `x`;
         displayResultElement.textContent = `${x1} ${tempName1} = ${x2} ${tempName2}`;
     }
+
+    clearButton.addEventListener("click", function () {
+        clearInput();
+    });
 }
