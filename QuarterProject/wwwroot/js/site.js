@@ -7,6 +7,7 @@ const userTextAreaElement = document.getElementById("userTextArea");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkTextAreaSupport();
+    checkTemperatureSupport();
 });
 
 /**
@@ -28,6 +29,17 @@ function updateIconsPath() {
     // Updates the Icons Path for "Privacy" and "RegisteredUsers" Navigation Links.
     iconPrivacyElement.setAttribute("d", iconPath);
     iconRegisteredUsersElement.setAttribute("d", iconPath);
+}
+
+/**
+ * Check if on the ConvertTemperatures page.
+ */
+function checkTemperatureSupport() {
+    const VALID_PAGE = ["/ConvertTemperatures"];
+
+    if (VALID_PAGE) {
+        convertTemperature(0);
+    }
 }
 
 /**
@@ -101,4 +113,71 @@ function updateCounts() {
     // Display the results.
     charCountElement.textContent = `${charCount}`;
     wordCountElement.textContent = `${wordCount}`;
+}
+
+/**
+ * Converts temperatures between Celsius, Fahrenheit and Kelvin units.
+ * @param {number} n - The state to set the conversion function.
+ */
+function convertTemperature(n) {
+    // Document Object Model(DOM) elements.
+    const tempName1Element = document.getElementById("temperatureName1");
+    const tempName2Element = document.getElementById("temperatureName2");
+    const input1Element = document.getElementById("input1");
+    const input2Element = document.getElementById("input2");
+    const displayFormulaElement = document.getElementById("formula");
+    const displayResultElement = document.getElementById("result");
+
+    // Temperature names and the input value.
+    const tempName1 = tempName1Element.value;
+    const tempName2 = tempName2Element.value;
+    const x = parseFloat(input1Element.value);
+
+    // Constructs the conversion name, example: "CelsiusToFahrenheit"
+    const conversionName = `${tempName1}To${tempName2}`;
+
+    // Searches for the constructed Id in the web page.
+    const conversionFormulaElement = document.querySelector(`#${conversionName}`);
+
+    if (n === 0) {
+        // If n is 0, initialize the web page.
+        clearInput();
+    }
+    else if (n === 1) {
+        // If n is 1, convert using the first input field.
+        if (conversionFormulaElement) {
+            // Get the conversion formula from the input field.
+            const formula = conversionFormulaElement.value;
+            const resultFunction = new Function("x", "return " + formula);
+            const result = resultFunction(x).toFixed(2);
+
+            displayFormulaElement.textContent = formula;
+            displayResultElement.textContent = `${x} ${tempName1} = ${result} ${tempName2}`;
+            input2Element.value = result;
+        }
+        else { // If the conversionFormulaElement does not exist, set result to x1.
+            displayFormulaElement.textContent = `x`;
+            displayResultElement.textContent = `${x} ${tempName1} = ${x} ${tempName2}`;
+            input2Element.value = x.toFixed(2);
+        }
+    }
+    else {
+        // If n is not 0 or 1, show the error message.
+        alert(`Invalid Number: ${n}`);
+    }
+
+    /**
+     * Sets the selected temperature options to default,
+     * clears the input fields, resets the Formula and Result displays.
+     */
+    function clearInput() {
+        tempName1Element.selectedIndex = 0;
+        tempName2Element.selectedIndex = 0;
+        let tempName1 = tempName1Element.value;
+        let tempName2 = tempName2Element.value;
+        let x1 = input1Element.value = 0;
+        let x2 = input2Element.value = 0;
+        displayFormulaElement.textContent = `x`;
+        displayResultElement.textContent = `${x1} ${tempName1} = ${x2} ${tempName2}`;
+    }
 }
