@@ -6,42 +6,42 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TemperatureName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TemperatureConversion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TemperatureFormula)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TemperatureName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TemperatureConversion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TemperatureFormula)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="_display-block-ruby">
+    <h3>Converts the Selected Temperature</h3>
+</div>
+<div class="_display-block-ruby">
+    <input id="input1" oninput="">
+    <select id="temperatureName1" onchange="">
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+    <p>=</p>
+    <input id="input2" oninput="">
+    <select id="temperatureName2" onchange="">
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+</div>
+
+<div class="_display-block-ruby">
+    <p>Formula: </p>
+    <p id="formula"></p>
+</div>
+<div class="_display-block-ruby">
+    <p>Result: </p>
+    <p id="conversion"></p>
+    <p id="result"></p>
+</div>
+
+<div class="_invisible">
+    @foreach (var item in Model)
+    {
+        <input id="@Html.DisplayFor(modelItem => item.TemperatureConversion)" value="@Html.DisplayFor(modelItem => item.TemperatureFormula)">
+        <label>@Html.DisplayFor(modelItem => item.TemperatureConversion)</label>
+        <br>
+    }
+</div>

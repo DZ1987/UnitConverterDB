@@ -50,3 +50,11 @@ textarea {
 pre {
     white-space: pre-wrap;
 }
+
+._invisible {
+    display: none;
+}
+
+._display-block-ruby {
+    display: block ruby;
+}
