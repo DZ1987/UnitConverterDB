@@ -24,6 +24,15 @@ namespace QuarterProject.Data
                 new RegisteredUser { Id = 2, UserName = "Admin", UserText = "TTTTTTTTTT EEEEEEEE SSSSSSSS TTTTTTTTTT\r\n    TT     EE       SS           TT\r\n    TT     EEEEEEE  SSSSSSSS     TT\r\n    TT     EE             SS     TT\r\n    TT     EEEEEEEE SSSSSSSS     TT" },
                 new RegisteredUser { Id = 3, UserName = "Admin", UserText = "<tbody>\r\n    @foreach (var item in Model)\r\n    {\r\n        <tr>\r\n            <td class=\"col-1 border-right\">\r\n                <a asp-action=\"Edit\" asp-route-id=\"@item.Id\">Edit</a><br>\r\n                <a asp-action=\"Details\" asp-route-id=\"@item.Id\">Details</a><br>\r\n                <a asp-action=\"Delete\" asp-route-id=\"@item.Id\">Delete</a>\r\n            </td>\r\n            <td>\r\n                <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>\r\n            </td>\r\n        </tr>\r\n    }\r\n</tbody>" }
             );
+
+            modelBuilder.Entity<ConvertTemperature>().HasData(
+                new ConvertTemperature { Id = 1, TemperatureName = "Celsius", TemperatureConversion = "CelsiusToFahrenheit", TemperatureFormula = "(x * (9/5)) + 32" },
+                new ConvertTemperature { Id = 2, TemperatureName = "Celsius", TemperatureConversion = "CelsiusToKelvin", TemperatureFormula = "x + 273.15" },
+                new ConvertTemperature { Id = 3, TemperatureName = "Fahrenheit", TemperatureConversion = "FahrenheitToCelsius", TemperatureFormula = "(x - 32) * (5/9)" },
+                new ConvertTemperature { Id = 4, TemperatureName = "Fahrenheit", TemperatureConversion = "FahrenheitToKelvin", TemperatureFormula = "(x - 32) * (5/9) + 273.15" },
+                new ConvertTemperature { Id = 5, TemperatureName = "Kelvin", TemperatureConversion = "KelvinToCelsius", TemperatureFormula = "x - 273.15" },
+                new ConvertTemperature { Id = 6, TemperatureName = "Kelvin", TemperatureConversion = "KelvinToFahrenheit", TemperatureFormula = "(x - 273.15) * (9/5) + 32" }
+            );
         }
     }
 }
