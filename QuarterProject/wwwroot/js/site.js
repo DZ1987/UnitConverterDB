@@ -184,4 +184,31 @@ function convertTemperature(n) {
     clearButton.addEventListener("click", function () {
         clearInput();
     });
+
+    input1Element.addEventListener("keypress", function (e) {
+        // Allow only numbers, decimal point and negative sign.
+        const allowedChars = /[0-9\.\-]/i.test(e.key);
+        const isDecimal = e.key === '.';
+        const isNegativeSign = e.key === '-';
+        const hasDecimal = this.value.includes('.');
+        const hasNegativeSign = this.value.includes('-');
+        const selectStart = this.selectionStart;
+
+        if (!allowedChars) {
+            // If not a number, decimal or a negative sign.
+            e.preventDefault();
+        }
+        else if (isDecimal && hasDecimal) {
+            // Prevent users from entering more than one decimal point.
+            e.preventDefault();
+        }
+        else if (isNegativeSign && selectStart !== 0) {
+            // Prevent negative sign if not at the start of the input.
+            e.preventDefault();
+        }
+        else if (hasNegativeSign && selectStart === 0) {
+            // Prevent users from entering anything before the negative sign.
+            e.preventDefault();
+        }
+    });
 }
