@@ -197,28 +197,38 @@ function convertTemperature() {
     });
 
     input1Element.addEventListener("keypress", function (e) {
-        // Allow only numbers, decimal point and negative sign.
-        const allowedChars = /[0-9\.\-]/i.test(e.key);
-        const isDecimal = e.key === '.';
+        // Check if the key pressed is a number, decimal point or a negative sign.
+        const isAllowedChar = /[0-9\.\-]/i.test(e.key);
+        const isDecimalPoint = e.key === '.';
         const isNegativeSign = e.key === '-';
-        const hasDecimal = this.value.includes('.');
-        const hasNegativeSign = this.value.includes('-');
-        const selectStart = this.selectionStart;
 
-        // If not a number, decimal or a negative sign.
-        if (!allowedChars) {
+        // Check if the input field includes a decimal point or a negative sign.
+        const hasDecimalPoint = this.value.includes('.');
+        const hasNegativeSign = this.value.includes('-');
+
+        // Get the start and end positions of the selected text in the input field.
+        const selectedStart = this.selectionStart;
+        const selectedEnd = this.selectionEnd;
+        const selectedText = this.value.substring(selectedStart, selectedEnd);
+
+        // Check if the selected text includes a decimal point or a negative sign.
+        const selectedIncludesDecimal = selectedText.includes('.');
+        const selectedIncludesNegative = selectedText.includes('-');
+
+        // Prevent input if not a number, decimal point or negative sign.
+        if (!isAllowedChar) {
             e.preventDefault();
         }
         // Prevent users from entering more than one decimal point.
-        else if (isDecimal && hasDecimal) {
+        else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
             e.preventDefault();
         }
         // Prevent users from entering a negative sign if not at the start of the input.
-        else if (isNegativeSign && selectStart !== 0) {
+        else if (isNegativeSign && selectedStart !== 0) {
             e.preventDefault();
         }
         // Prevent users from entering anything before the negative sign.
-        else if (hasNegativeSign && selectStart === 0) {
+        else if (hasNegativeSign && selectedStart === 0 && !selectedIncludesNegative) {
             e.preventDefault();
         }
     });
