@@ -36,9 +36,19 @@ function updateIconsPath() {
  */
 function checkTemperatureSupport() {
     const VALID_PAGE = ["/ConvertTemperatures"];
+    const currentPage = window.location.pathname;
 
-    if (VALID_PAGE) {
-        convertTemperature(0);
+    if (VALID_PAGE.includes(currentPage)) {
+        // Document Object Model(DOM) elements.
+        const input1Element = document.getElementById("input1");
+        const tempName1Element = document.getElementById("temperatureName1");
+        const tempName2Element = document.getElementById("temperatureName2");
+
+        input1Element.addEventListener("input", convertTemperature);
+        tempName1Element.addEventListener("change", convertTemperature);
+        tempName2Element.addEventListener("change", convertTemperature);
+
+        convertTemperature();
     }
 }
 
@@ -117,9 +127,8 @@ function updateCounts() {
 
 /**
  * Converts temperatures between Celsius, Fahrenheit and Kelvin units.
- * @param {number} n - The state to set the conversion function.
  */
-function convertTemperature(n) {
+function convertTemperature() {
     // Document Object Model(DOM) elements.
     const tempName1Element = document.getElementById("temperatureName1");
     const tempName2Element = document.getElementById("temperatureName2");
@@ -127,43 +136,45 @@ function convertTemperature(n) {
     const input2Element = document.getElementById("input2");
     const displayFormulaElement = document.getElementById("formula");
     const displayResultElement = document.getElementById("result");
+    const clearButtonElement = document.getElementById("clearButton");
 
     // Temperature names and the input value.
     const tempName1 = tempName1Element.value;
     const tempName2 = tempName2Element.value;
-    const x = parseFloat(input1Element.value);
+    let x = parseFloat(input1Element.value);
 
-    // Constructs the conversion name, example: "CelsiusToFahrenheit"
-    const conversionName = `${tempName1}To${tempName2}`;
-
-    // Searches for the constructed Id in the web page.
-    const conversionFormulaElement = document.querySelector(`#${conversionName}`);
-
-    if (n === 0) {
-        // If n is 0, initialize the web page.
-        clearInput();
+    // If x is Not a Number show the message.
+    if (isNaN(x)) {
+        x = "Enter a valid number";
+        input2Element.value = x;
+        displayFormulaElement.textContent = x;
+        displayResultElement.textContent = x;
     }
-    else if (n === 1) {
-        // If n is 1, convert using the first input field.
+    // Else x is a valid number.
+    else {
+        // Constructs the conversion name, example: "CelsiusToFahrenheit".
+        const conversionName = `${tempName1}To${tempName2}`;
+
+        // Searches for the constructed Id in the web page.
+        const conversionFormulaElement = document.querySelector(`#${conversionName}`);
+
+        // If the conversionFormulaElement Id exists.
         if (conversionFormulaElement) {
             // Get the conversion formula from the input field.
             const formula = conversionFormulaElement.value;
             const resultFunction = new Function("x", "return " + formula);
-            const result = resultFunction(x).toFixed(2);
+            const result = resultFunction(x);
 
+            input2Element.value = result;
             displayFormulaElement.textContent = formula;
             displayResultElement.textContent = `${x} ${tempName1} = ${result} ${tempName2}`;
-            input2Element.value = result;
         }
-        else { // If the conversionFormulaElement does not exist, set result to x1.
+        // If the conversionFormulaElement Id does not exist, set result to x.
+        else {
+            input2Element.value = x;
             displayFormulaElement.textContent = `x`;
             displayResultElement.textContent = `${x} ${tempName1} = ${x} ${tempName2}`;
-            input2Element.value = x.toFixed(2);
         }
-    }
-    else {
-        // If n is not 0 or 1, show the error message.
-        alert(`Invalid Number: ${n}`);
     }
 
     /**
@@ -181,7 +192,7 @@ function convertTemperature(n) {
         displayResultElement.textContent = `${x1} ${tempName1} = ${x2} ${tempName2}`;
     }
 
-    clearButton.addEventListener("click", function () {
+    clearButtonElement.addEventListener("click", function () {
         clearInput();
     });
 
@@ -194,20 +205,20 @@ function convertTemperature(n) {
         const hasNegativeSign = this.value.includes('-');
         const selectStart = this.selectionStart;
 
+        // If not a number, decimal or a negative sign.
         if (!allowedChars) {
-            // If not a number, decimal or a negative sign.
             e.preventDefault();
         }
+        // Prevent users from entering more than one decimal point.
         else if (isDecimal && hasDecimal) {
-            // Prevent users from entering more than one decimal point.
             e.preventDefault();
         }
+        // Prevent users from entering a negative sign if not at the start of the input.
         else if (isNegativeSign && selectStart !== 0) {
-            // Prevent negative sign if not at the start of the input.
             e.preventDefault();
         }
+        // Prevent users from entering anything before the negative sign.
         else if (hasNegativeSign && selectStart === 0) {
-            // Prevent users from entering anything before the negative sign.
             e.preventDefault();
         }
     });

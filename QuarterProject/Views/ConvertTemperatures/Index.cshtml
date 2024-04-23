@@ -6,12 +6,11 @@
 
 <h1>Index</h1>
 
+<h3>Convert the <span style="color: green">Selected Temperature</span></h3>
+
 <div class="_display-block-ruby">
-    <h3>Convert the <span style="color: green">Selected Temperature</span></h3>
-</div>
-<div class="_display-block-ruby">
-    <input id="input1" class="_border-green" oninput="convertTemperature(1)">
-    <select id="temperatureName1" class="_border-green" onchange="convertTemperature(1)">
+    <input id="input1" class="_border-green" value="0">
+    <select id="temperatureName1" class="_border-green">
         @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
@@ -19,7 +18,7 @@
     </select>
     <p>=</p>
     <input id="input2" class="_border-black" disabled>
-    <select id="temperatureName2" class="_border-black" onchange="convertTemperature(1)">
+    <select id="temperatureName2" class="_border-black">
         @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
