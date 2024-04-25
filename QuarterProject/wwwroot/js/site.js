@@ -245,8 +245,14 @@ function convertTemperature() {
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
             e.preventDefault();
         }
-        // Prevent users from entering a negative sign if not at the start of the input.
-        else if (isNegativeSign && selectedStart !== 0) {
+        // If there is no negative sign, add it to the start of the input.
+        else if (isNegativeSign && !hasNegativeSign) {
+            e.preventDefault();
+            this.value = `${e.key}${this.value}`;
+            convertTemperature();
+        }
+        // Prevent users from entering more than one negative sign.
+        else if (isNegativeSign && hasNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
         }
         // Prevent users from entering anything before the negative sign.
