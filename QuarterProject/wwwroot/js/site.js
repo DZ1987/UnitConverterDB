@@ -204,11 +204,22 @@ function convertTemperature() {
         // Gets the input value length.
         const inputLength = this.value.length;
 
-        // If the input has a negative sign or the input length is 1, set the value to 0.
-        if (isRemovalKey && ((inputLength === 2 && hasNegativeSign) || inputLength === 1)) {
-            e.preventDefault();
-            this.value = "0";
-            convertTemperature();
+        // Get the start and end positions of the selected text in the input field.
+        const selectedAll = this.selectionStart === 0 && this.selectionEnd === inputLength;
+
+        if (isRemovalKey) {
+            // If all the text is selected in the input, set the value to 0.
+            if (selectedAll) {
+                e.preventDefault();
+                this.value = "0";
+                convertTemperature();
+            }
+            // If the input has a negative sign or the input length is 1, set the value to 0.
+            else if ((inputLength === 2 && hasNegativeSign) || inputLength === 1) {
+                e.preventDefault();
+                this.value = "0";
+                convertTemperature();
+            }
         }
     });
 
