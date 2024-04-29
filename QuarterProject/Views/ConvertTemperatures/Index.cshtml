@@ -41,7 +41,7 @@
 <div class="_invisible">
     @foreach (var item in Model)
     {
-        <input id="@Html.DisplayFor(modelItem => item.TemperatureConversion)" value="@Html.DisplayFor(modelItem => item.TemperatureFormula)">
+        <input id="@Html.DisplayFor(modelItem => item.TemperatureConversion)" value="@Html.DisplayFor(modelItem => item.TemperatureFormula)" disabled>
         <label>@Html.DisplayFor(modelItem => item.TemperatureConversion)</label>
         <br>
     }

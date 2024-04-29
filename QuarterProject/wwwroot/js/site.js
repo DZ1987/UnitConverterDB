@@ -192,8 +192,35 @@ function convertTemperature() {
         displayResultElement.textContent = `${x1} ${tempName1} = ${x2} ${tempName2}`;
     }
 
-    clearButtonElement.addEventListener("click", function () {
-        clearInput();
+    clearButtonElement.addEventListener("click", clearInput);
+
+    input1Element.addEventListener("keydown", function (e) {
+        // Check if the key pressed is backspace or delete.
+        const isRemovalKey = e.key === "Backspace" || e.key === "Delete";
+
+        // Check if the input field includes a negative sign.
+        const hasNegativeSign = this.value.includes('-');
+
+        // Gets the input value length.
+        const inputLength = this.value.length;
+
+        // Get the start and end positions of the selected text in the input field.
+        const selectedAll = this.selectionStart === 0 && this.selectionEnd === inputLength;
+
+        if (isRemovalKey) {
+            // If all the text is selected in the input, set the value to 0.
+            if (selectedAll) {
+                e.preventDefault();
+                this.value = "0";
+                convertTemperature();
+            }
+            // If the input has a negative sign or the input length is 1, set the value to 0.
+            else if ((inputLength === 2 && hasNegativeSign) || inputLength === 1) {
+                e.preventDefault();
+                this.value = "0";
+                convertTemperature();
+            }
+        }
     });
 
     input1Element.addEventListener("keypress", function (e) {
@@ -219,12 +246,24 @@ function convertTemperature() {
         if (!isAllowedChar) {
             e.preventDefault();
         }
+        // Replaces the default input value 0 with the user entry.
+        else if (this.value === '0' && selectedStart !== 0 && !isDecimalPoint && !isNegativeSign) {
+            e.preventDefault();
+            this.value = `${e.key}`;
+            convertTemperature();
+        }
         // Prevent users from entering more than one decimal point.
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
             e.preventDefault();
         }
-        // Prevent users from entering a negative sign if not at the start of the input.
-        else if (isNegativeSign && selectedStart !== 0) {
+        // If there is no negative sign, add it to the start of the input.
+        else if (isNegativeSign && !hasNegativeSign) {
+            e.preventDefault();
+            this.value = `${e.key}${this.value}`;
+            convertTemperature();
+        }
+        // Prevent users from entering more than one negative sign.
+        else if (isNegativeSign && hasNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
         }
         // Prevent users from entering anything before the negative sign.
