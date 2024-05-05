@@ -219,6 +219,23 @@ function convertTemperature() {
         const selectedIncludesDecimal = selectedText.includes('.');
         const selectedIncludesNegative = selectedText.includes('-');
 
+        // If the selected text length is equal to the input value length.
+        if (selectedText.length === inputValue.length) {
+            // If "Backspace" or "Delete" keys are pressed.
+            if (isBackspace || isDelete) {
+                this.value = "0";
+            }
+            // If a decimal point is entered.
+            else if (isDecimalPoint) {
+                this.value = "0.";
+            }
+            // If a negative sign is entered.
+            else if (isNegativeSign) {
+                this.value = "-0";
+            }
+            convertTemperature();
+        }
+
         // Prevent input if not a number, decimal point or negative sign.
         if (!isAllowedChar) {
             e.preventDefault();
