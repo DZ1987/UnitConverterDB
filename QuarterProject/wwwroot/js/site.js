@@ -222,6 +222,11 @@ function convertTemperature() {
         // Prevent input if not a number, decimal point or negative sign.
         if (!isAllowedChar) {
             e.preventDefault();
+        // Replace the default value "0" on user input.
+        else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKeys) {
+            e.preventDefault();
+            this.value = inputValue === "0" ? e.key : `-${e.key}`;
+            convertTemperature();
         }
         // Prevent users from entering more than one decimal point.
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
