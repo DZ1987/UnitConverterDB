@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuarterProject.Models.ConvertLength>
+﻿@model IEnumerable<ConvertLength>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,43 +6,43 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LengthName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LengthConversion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LengthFormula)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<h3>Convert the <span style="color: green">Selected Length</span></h3>
+
+<div class="_display-block-ruby">
+    <input id="input1" class="_border-green" value="0">
+    <select id="lengthName1" class="_border-green">
+        @foreach (var item in Model.Select(m => m.LengthName).Distinct())
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LengthName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LengthConversion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LengthFormula)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+            <option>@Html.DisplayFor(modelItem => item)</option>
         }
-    </tbody>
-</table>
+    </select>
+    <p>=</p>
+    <input id="input2" class="_border-black" disabled>
+    <select id="lengthName2" class="_border-black">
+        @foreach (var item in Model.Select(m => m.LengthName).Distinct())
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+</div>
+
+<div class="_display-block-ruby">
+    <p>Formula: </p>
+    <p id="formula"></p>
+</div>
+<div class="_display-block-ruby">
+    <p>Result: </p>
+    <p id="conversion"></p>
+    <p id="result"></p>
+</div>
+
+<button id="clearButton" class="btn btn-danger">Clear Input</button>
+
+<div class="_invisible">
+    @foreach (var item in Model)
+    {
+        <input id="@Html.DisplayFor(modelItem => item.LengthConversion)" value="@Html.DisplayFor(modelItem => item.LengthFormula)" disabled>
+        <label>@Html.DisplayFor(modelItem => item.LengthConversion)</label>
+        <br>
+    }
+</div>
