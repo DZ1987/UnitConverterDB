@@ -239,6 +239,31 @@ function convertTemperature() {
         // Prevent input if not a number, decimal point or negative sign.
         if (!isAllowedChar) {
             e.preventDefault();
+        }
+        // If the "Backspace" key is pressed and the Caret is not at the start of the input field
+        // or the "Delete" key is pressed and the Caret is not at the end of the input field.
+        else if (isBackspace && this.selectionStart !== 0 || isDelete && this.selectionStart !== inputValue.length) {
+            // If the input value length is 2 and has a negative sign.
+            if (inputValue.length === 2 && hasNegativeSign) {
+                // If the "Backspace" key is pressed.
+                if (isBackspace) {
+                    // If the Caret is in the middle, keep the current value otherwise set it to "0".
+                    this.value = this.selectionStart === 1 ? this.value : "0";
+                }
+                // If the "Delete" key is pressed.
+                else if (isDelete) {
+                    // If the Caret is at the start, keep the current value otherwise set it to "0".
+                    this.value = this.selectionStart === 0 ? this.value : "0";
+                }
+                convertTemperature();
+            }
+            // If the input value length is 1, set the value to back "0".
+            else if (inputValue.length === 1) {
+                e.preventDefault();
+                this.value = "0";
+                convertTemperature();
+            }
+        }
         // Replace the default value "0" on user input.
         else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKeys) {
             e.preventDefault();
