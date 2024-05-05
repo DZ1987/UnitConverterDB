@@ -196,20 +196,24 @@ function convertTemperature() {
         clearInput();
     });
 
-    input1Element.addEventListener("keypress", function (e) {
-        // Check if the key pressed is a number, decimal point or a negative sign.
-        const isAllowedChar = /[0-9\.\-]/i.test(e.key);
+    input1Element.addEventListener("keydown", function (e) {
+        // The current value of the input field.
+        const inputValue = this.value;
+
+        // Check if the pressed key is a number, a decimal point, a negative sign, or one of the allowed keys.
+        const isAllowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key);
+        const isAllowedChar = /[0-9\.\-]/i.test(e.key) || isAllowedKeys;
+        const isBackspace = e.key === "Backspace";
+        const isDelete = e.key === "Delete";
         const isDecimalPoint = e.key === '.';
         const isNegativeSign = e.key === '-';
 
         // Check if the input field includes a decimal point or a negative sign.
-        const hasDecimalPoint = this.value.includes('.');
-        const hasNegativeSign = this.value.includes('-');
+        const hasDecimalPoint = inputValue.includes('.');
+        const hasNegativeSign = inputValue.includes('-');
 
-        // Get the start and end positions of the selected text in the input field.
-        const selectedStart = this.selectionStart;
-        const selectedEnd = this.selectionEnd;
-        const selectedText = this.value.substring(selectedStart, selectedEnd);
+        // Get the selected text within the input field.
+        const selectedText = inputValue.substring(this.selectionStart, this.selectionEnd);
 
         // Check if the selected text includes a decimal point or a negative sign.
         const selectedIncludesDecimal = selectedText.includes('.');
@@ -223,12 +227,14 @@ function convertTemperature() {
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
             e.preventDefault();
         }
-        // Prevent users from entering a negative sign if not at the start of the input.
-        else if (isNegativeSign && selectedStart !== 0) {
+        // Moves the negative sign to the start of the input field.
+        else if (isNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
+            this.value = `-${inputValue.replace('-', '')}`;
+            convertTemperature();
         }
         // Prevent users from entering anything before the negative sign.
-        else if (hasNegativeSign && selectedStart === 0 && !selectedIncludesNegative) {
+        else if (hasNegativeSign && this.selectionStart === 0 && !isAllowedKeys && !selectedIncludesNegative) {
             e.preventDefault();
         }
     });
