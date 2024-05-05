@@ -7,6 +7,7 @@ const userTextAreaElement = document.getElementById("userTextArea");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkTextAreaSupport();
+    checkLengthSupport();
     checkTemperatureSupport();
 });
 
@@ -29,6 +30,27 @@ function updateIconsPath() {
     // Updates the Icons Path for "Privacy" and "RegisteredUsers" Navigation Links.
     iconPrivacyElement.setAttribute("d", iconPath);
     iconRegisteredUsersElement.setAttribute("d", iconPath);
+}
+
+/**
+ * Check if on the ConvertLengths page.
+ */
+function checkLengthSupport() {
+    const VALID_PAGE = ["/ConvertLengths"];
+    const currentPage = window.location.pathname;
+
+    if (VALID_PAGE.includes(currentPage)) {
+        // Document Object Model(DOM) elements.
+        const input1Element = document.getElementById("input1");
+        const lengthName1Element = document.getElementById("lengthName1");
+        const lengthName2Element = document.getElementById("lengthName2");
+
+        input1Element.addEventListener("input", convertLength);
+        lengthName1Element.addEventListener("change", convertLength);
+        lengthName2Element.addEventListener("change", convertLength);
+
+        convertLength();
+    }
 }
 
 /**
@@ -123,6 +145,152 @@ function updateCounts() {
     // Display the results.
     charCountElement.textContent = `${charCount}`;
     wordCountElement.textContent = `${wordCount}`;
+}
+
+/**
+ * Converts length between Millimeter, Centimeter, Meter, Kilometer,
+ * Inch, Foot, Yard, Mile units.
+ */
+function convertLength() {
+    // Document Object Model(DOM) elements.
+    const lengthName1Element = document.getElementById("lengthName1");
+    const lengthName2Element = document.getElementById("lengthName2");
+    const input1Element = document.getElementById("input1");
+    const input2Element = document.getElementById("input2");
+    const displayFormulaElement = document.getElementById("formula");
+    const displayResultElement = document.getElementById("result");
+    const clearButtonElement = document.getElementById("clearButton");
+
+    // Length names and the input value.
+    const lengthName1 = lengthName1Element.value;
+    const lengthName2 = lengthName2Element.value;
+    let x = parseFloat(input1Element.value);
+
+    // If x is Not a Number show the message.
+    if (isNaN(x)) {
+        x = "Enter a valid number";
+        input2Element.value = x;
+        displayFormulaElement.textContent = x;
+        displayResultElement.textContent = x;
+    }
+    // Else x is a valid number.
+    else {
+        // Constructs the conversion name, example: "KilometerToMile".
+        const conversionName = `${lengthName1}To${lengthName2}`;
+
+        // Searches for the constructed Id in the web page.
+        const conversionFormulaElement = document.querySelector(`#${conversionName}`);
+
+        // If the conversionFormulaElement Id exists.
+        if (conversionFormulaElement) {
+            // Get the conversion formula from the input field.
+            const formula = conversionFormulaElement.value;
+            const resultFunction = new Function("x", "return " + formula);
+            const result = resultFunction(x);
+
+            input2Element.value = result;
+            displayFormulaElement.textContent = formula;
+            displayResultElement.textContent = `${x} ${lengthName1} = ${result} ${lengthName2}`;
+        }
+        // If the conversionFormulaElement Id does not exist, set result to x.
+        else {
+            input2Element.value = x;
+            displayFormulaElement.textContent = `x`;
+            displayResultElement.textContent = `${x} ${lengthName1} = ${x} ${lengthName2}`;
+        }
+    }
+
+    /**
+     * Sets the selected length options to default,
+     * clears the input fields, resets the Formula and Result displays.
+     */
+    function clearInput() {
+        lengthName1Element.selectedIndex = 0;
+        lengthName2Element.selectedIndex = 0;
+        let lengthName1 = lengthName1Element.value;
+        let lengthName2 = lengthName2Element.value;
+        let x1 = input1Element.value = 0;
+        let x2 = input2Element.value = 0;
+        displayFormulaElement.textContent = `x`;
+        displayResultElement.textContent = `${x1} ${lengthName1} = ${x2} ${lengthName2}`;
+    }
+
+    clearButtonElement.addEventListener("click", function () {
+        clearInput();
+    });
+
+    input1Element.addEventListener("keydown", function (e) {
+        // The current value of the input field.
+        const inputValue = this.value;
+
+        // Check if the pressed key is a number, a decimal point or one of the allowed keys.
+        const isAllowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key);
+        const isAllowedChar = /[0-9\.]/i.test(e.key) || isAllowedKeys;
+        const isBackspace = e.key === "Backspace";
+        const isDelete = e.key === "Delete";
+        const isDecimalPoint = e.key === '.';
+
+        // Check if the input field includes a decimal point.
+        const hasDecimalPoint = inputValue.includes('.');
+
+        // Get the selected text within the input field.
+        const selectedText = inputValue.substring(this.selectionStart, this.selectionEnd);
+
+        // Check if the selected text includes a decimal point.
+        const selectedIncludesDecimal = selectedText.includes('.');
+
+        // If the selected text length is equal to the input value length.
+        if (selectedText.length === inputValue.length) {
+            // If "Backspace" or "Delete" keys are pressed.
+            if (isBackspace || isDelete) {
+                this.value = "0";
+            }
+            // If a decimal point is entered.
+            else if (isDecimalPoint) {
+                this.value = "0.";
+            }
+            convertLength();
+        }
+
+        // Prevent input if not a number or a decimal point.
+        if (!isAllowedChar) {
+            e.preventDefault();
+        }
+        // If the "Backspace" key is pressed and the Caret is not at the start of the input field
+        // or the "Delete" key is pressed and the Caret is not at the end of the input field.
+        else if (isBackspace && this.selectionStart !== 0 || isDelete && this.selectionStart !== inputValue.length) {
+            // If the input value length is 2 and has a decimal point.
+            if (inputValue.length === 2 && hasDecimalPoint) {
+                // If the "Backspace" key is pressed.
+                if (isBackspace) {
+                    // If the Caret is in the middle, keep the current value otherwise set it to "0".
+                    this.value = this.selectionStart === 1 ? this.value : "0";
+                }
+                // If the "Delete" key is pressed.
+                else if (isDelete) {
+                    // If the Caret is at the start, keep the current value otherwise set it to "0".
+                    this.value = this.selectionStart === 0 ? this.value : "0";
+                }
+                convertLength();
+            }
+            // If the input value length is 1, set the value to back "0".
+            else if (inputValue.length === 1) {
+                e.preventDefault();
+                this.value = "0";
+                convertLength();
+            }
+        }
+        // Replace the default value "0" on user input.
+        else if (inputValue === "0" && !isDecimalPoint && !isAllowedKeys) {
+            e.preventDefault();
+            this.value = inputValue === "0" ? e.key : `-${e.key}`;
+            convertLength();
+        }
+        // Prevent users from entering more than one decimal point.
+        else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
+            e.preventDefault();
+        }
+    });
 }
 
 /**
