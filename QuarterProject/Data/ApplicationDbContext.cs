@@ -12,6 +12,7 @@ namespace QuarterProject.Data
         }
 
         public DbSet<RegisteredUser> RegisteredUser { get; set; }
+        public DbSet<ConvertLength> ConvertLength { get; set; }
         public DbSet<ConvertTemperature> ConvertTemperature { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
