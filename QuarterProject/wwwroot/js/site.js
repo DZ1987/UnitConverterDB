@@ -1,14 +1,22 @@
-﻿// Document Object Model(DOM) elements.
+﻿// Document Object Model(DOM) elements: RegisteredUser.
 const charCountElement = document.getElementById("charCount");
 const wordCountElement = document.getElementById("wordCount");
 const maxCharsElement = document.getElementById("maxChars");
 const userTextAreaElement = document.getElementById("userTextArea");
 
+// Document Object Model(DOM) elements: Conversion.
+const input1Element = document.getElementById("input1");
+const input2Element = document.getElementById("input2");
+const inputName1Element = document.getElementById("inputName1");
+const inputName2Element = document.getElementById("inputName2");
+const displayFormulaElement = document.getElementById("formula");
+const displayResultElement = document.getElementById("result");
+const clearButtonElement = document.getElementById("clearButton");
+
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkTextAreaSupport();
-    checkLengthSupport();
-    checkTemperatureSupport();
+    checkConversionSupport();
 });
 
 /**
@@ -33,44 +41,28 @@ function updateIconsPath() {
 }
 
 /**
- * Check if on the ConvertLengths page.
+ * Check if on the Conversion pages.
  */
-function checkLengthSupport() {
-    const VALID_PAGE = ["/ConvertLengths"];
+function checkConversionSupport() {
+    const VALID_PAGES = ["/ConvertLengths", "/ConvertTemperatures"];
+    const validPage = Array.from(VALID_PAGES).some(p => window.location.href.includes(p));
     const currentPage = window.location.pathname;
+    const VALID_PAGE_LENGTH = ["/ConvertLengths"];
+    const VALID_PAGE_TEMPURATURE = ["/ConvertTemperatures"];
 
-    if (VALID_PAGE.includes(currentPage)) {
-        // Document Object Model(DOM) elements.
-        const input1Element = document.getElementById("input1");
-        const lengthName1Element = document.getElementById("lengthName1");
-        const lengthName2Element = document.getElementById("lengthName2");
+    if (validPage) {
+        input1Element.addEventListener("input", convertInput);
+        inputName1Element.addEventListener("change", convertInput);
+        inputName2Element.addEventListener("change", convertInput);
 
-        input1Element.addEventListener("input", convertLength);
-        lengthName1Element.addEventListener("change", convertLength);
-        lengthName2Element.addEventListener("change", convertLength);
+        if (VALID_PAGE_LENGTH.includes(currentPage)) {
+            inputValidation(0);
+        }
+        else if (VALID_PAGE_TEMPURATURE.includes(currentPage)) {
+            inputValidation(1);
+        }
 
-        convertLength();
-    }
-}
-
-/**
- * Check if on the ConvertTemperatures page.
- */
-function checkTemperatureSupport() {
-    const VALID_PAGE = ["/ConvertTemperatures"];
-    const currentPage = window.location.pathname;
-
-    if (VALID_PAGE.includes(currentPage)) {
-        // Document Object Model(DOM) elements.
-        const input1Element = document.getElementById("input1");
-        const tempName1Element = document.getElementById("temperatureName1");
-        const tempName2Element = document.getElementById("temperatureName2");
-
-        input1Element.addEventListener("input", convertTemperature);
-        tempName1Element.addEventListener("change", convertTemperature);
-        tempName2Element.addEventListener("change", convertTemperature);
-
-        convertTemperature();
+        convertInput();
     }
 }
 
@@ -148,22 +140,12 @@ function updateCounts() {
 }
 
 /**
- * Converts length between Millimeter, Centimeter, Meter, Kilometer,
- * Inch, Foot, Yard, Mile units.
+ * Converts the selected input to the selected output.
  */
-function convertLength() {
-    // Document Object Model(DOM) elements.
-    const lengthName1Element = document.getElementById("lengthName1");
-    const lengthName2Element = document.getElementById("lengthName2");
-    const input1Element = document.getElementById("input1");
-    const input2Element = document.getElementById("input2");
-    const displayFormulaElement = document.getElementById("formula");
-    const displayResultElement = document.getElementById("result");
-    const clearButtonElement = document.getElementById("clearButton");
-
-    // Length names and the input value.
-    const lengthName1 = lengthName1Element.value;
-    const lengthName2 = lengthName2Element.value;
+function convertInput() {
+    // The name and the input value of the units.
+    const inputName1 = inputName1Element.value;
+    const inputName2 = inputName2Element.value;
     let x = parseFloat(input1Element.value);
 
     // If x is Not a Number show the message.
@@ -175,8 +157,8 @@ function convertLength() {
     }
     // Else x is a valid number.
     else {
-        // Constructs the conversion name, example: "KilometerToMile".
-        const conversionName = `${lengthName1}To${lengthName2}`;
+        // Constructs the conversion name, example: "KilometerToMile", "CelsiusToFahrenheit".
+        const conversionName = `${inputName1}To${inputName2}`;
 
         // Searches for the constructed Id in the web page.
         const conversionFormulaElement = document.querySelector(`#${conversionName}`);
@@ -190,214 +172,52 @@ function convertLength() {
 
             input2Element.value = result;
             displayFormulaElement.textContent = formula;
-            displayResultElement.textContent = `${x} ${lengthName1} = ${result} ${lengthName2}`;
+            displayResultElement.textContent = `${x} ${inputName1} = ${result} ${inputName2}`;
         }
         // If the conversionFormulaElement Id does not exist, set result to x.
         else {
             input2Element.value = x;
             displayFormulaElement.textContent = `x`;
-            displayResultElement.textContent = `${x} ${lengthName1} = ${x} ${lengthName2}`;
+            displayResultElement.textContent = `${x} ${inputName1} = ${x} ${inputName2}`;
         }
     }
 
     /**
-     * Sets the selected length options to default,
-     * clears the input fields, resets the Formula and Result displays.
+     * Sets the selected options back to default, clears the input fields,
+     * and resets the Formula and Result displays.
      */
     function clearInput() {
-        lengthName1Element.selectedIndex = 0;
-        lengthName2Element.selectedIndex = 0;
-        let lengthName1 = lengthName1Element.value;
-        let lengthName2 = lengthName2Element.value;
+        inputName1Element.selectedIndex = 0;
+        inputName2Element.selectedIndex = 0;
+        let inputName1 = inputName1Element.value;
+        let inputName2 = inputName2Element.value;
         let x1 = input1Element.value = 0;
         let x2 = input2Element.value = 0;
         displayFormulaElement.textContent = `x`;
-        displayResultElement.textContent = `${x1} ${lengthName1} = ${x2} ${lengthName2}`;
-    }
-
-    clearButtonElement.addEventListener("click", function () {
-        clearInput();
-    });
-
-    input1Element.addEventListener("keydown", function (e) {
-        // The current value of the input field.
-        const inputValue = this.value;
-
-        // Check if the pressed key is a number, a decimal point or one of the allowed keys.
-        const isAllowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key);
-        const isAllowedChar = /[0-9\.]/i.test(e.key) || isAllowedKeys;
-        const isBackspace = e.key === "Backspace";
-        const isDelete = e.key === "Delete";
-        const isDecimalPoint = e.key === '.';
-
-        // Check if the input field includes a decimal point.
-        const hasDecimalPoint = inputValue.includes('.');
-
-        // Get the selected text within the input field.
-        const selectedText = inputValue.substring(this.selectionStart, this.selectionEnd);
-
-        // Check if the selected text includes a decimal point.
-        const selectedIncludesDecimal = selectedText.includes('.');
-
-        // If the selected text length is equal to the input value length.
-        if (selectedText.length === inputValue.length) {
-            // If "Backspace" or "Delete" keys are pressed.
-            if (isBackspace || isDelete) {
-                this.value = "0";
-            }
-            // If a decimal point is entered.
-            else if (isDecimalPoint) {
-                this.value = "0.";
-            }
-            convertLength();
-        }
-
-        // Prevent input if not a number or a decimal point.
-        if (!isAllowedChar) {
-            e.preventDefault();
-        }
-        // If the "Backspace" key is pressed and the Caret is not at the start of the input field
-        // or the "Delete" key is pressed and the Caret is not at the end of the input field.
-        else if (isBackspace && this.selectionStart !== 0 || isDelete && this.selectionStart !== inputValue.length) {
-            // If the input value length is 2 and has a decimal point.
-            if (inputValue.length === 2 && hasDecimalPoint) {
-                // If the "Backspace" key is pressed.
-                if (isBackspace) {
-                    // If the Caret is in the middle, keep the current value otherwise set it to "0".
-                    this.value = this.selectionStart === 1 ? this.value : "0";
-                }
-                // If the "Delete" key is pressed.
-                else if (isDelete) {
-                    // If the Caret is at the start, keep the current value otherwise set it to "0".
-                    this.value = this.selectionStart === 0 ? this.value : "0";
-                }
-                convertLength();
-            }
-            // If the input value length is 1, set the value to back "0".
-            else if (inputValue.length === 1) {
-                e.preventDefault();
-                this.value = "0";
-                convertLength();
-            }
-        }
-        // Replace the default value "0" on user input.
-        else if (inputValue === "0" && !isDecimalPoint && !isAllowedKeys) {
-            e.preventDefault();
-            this.value = inputValue === "0" ? e.key : `-${e.key}`;
-            convertLength();
-        }
-        // Prevent users from entering more than one decimal point.
-        else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
-            e.preventDefault();
-        }
-    });
-}
-
-/**
- * Converts temperatures between Celsius, Fahrenheit and Kelvin units.
- */
-function convertTemperature() {
-    // Document Object Model(DOM) elements.
-    const tempName1Element = document.getElementById("temperatureName1");
-    const tempName2Element = document.getElementById("temperatureName2");
-    const input1Element = document.getElementById("input1");
-    const input2Element = document.getElementById("input2");
-    const displayFormulaElement = document.getElementById("formula");
-    const displayResultElement = document.getElementById("result");
-    const clearButtonElement = document.getElementById("clearButton");
-
-    // Temperature names and the input value.
-    const tempName1 = tempName1Element.value;
-    const tempName2 = tempName2Element.value;
-    let x = parseFloat(input1Element.value);
-
-    // If x is Not a Number show the message.
-    if (isNaN(x)) {
-        x = "Enter a valid number";
-        input2Element.value = x;
-        displayFormulaElement.textContent = x;
-        displayResultElement.textContent = x;
-    }
-    // Else x is a valid number.
-    else {
-        // Constructs the conversion name, example: "CelsiusToFahrenheit".
-        const conversionName = `${tempName1}To${tempName2}`;
-
-        // Searches for the constructed Id in the web page.
-        const conversionFormulaElement = document.querySelector(`#${conversionName}`);
-
-        // If the conversionFormulaElement Id exists.
-        if (conversionFormulaElement) {
-            // Get the conversion formula from the input field.
-            const formula = conversionFormulaElement.value;
-            const resultFunction = new Function("x", "return " + formula);
-            const result = resultFunction(x);
-
-            input2Element.value = result;
-            displayFormulaElement.textContent = formula;
-            displayResultElement.textContent = `${x} ${tempName1} = ${result} ${tempName2}`;
-        }
-        // If the conversionFormulaElement Id does not exist, set result to x.
-        else {
-            input2Element.value = x;
-            displayFormulaElement.textContent = `x`;
-            displayResultElement.textContent = `${x} ${tempName1} = ${x} ${tempName2}`;
-        }
-    }
-
-    /**
-     * Sets the selected temperature options to default,
-     * clears the input fields, resets the Formula and Result displays.
-     */
-    function clearInput() {
-        tempName1Element.selectedIndex = 0;
-        tempName2Element.selectedIndex = 0;
-        let tempName1 = tempName1Element.value;
-        let tempName2 = tempName2Element.value;
-        let x1 = input1Element.value = 0;
-        let x2 = input2Element.value = 0;
-        displayFormulaElement.textContent = `x`;
-        displayResultElement.textContent = `${x1} ${tempName1} = ${x2} ${tempName2}`;
+        displayResultElement.textContent = `${x1} ${inputName1} = ${x2} ${inputName2}`;
     }
 
     clearButtonElement.addEventListener("click", clearInput);
+}
 
+/**
+ * Validate the user entered input by preventing invalid characters from being entered.
+ * @param {int} n If the input supports negative numbers: (0 = No, 1 = Yes).
+ */
+function inputValidation(n) {
     input1Element.addEventListener("keydown", function (e) {
-        // Check if the key pressed is backspace or delete.
-        const isRemovalKey = e.key === "Backspace" || e.key === "Delete";
+        const ALLOWED_KEYS = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+        const ALLOWED_CHARS = {
+            0: /[0-9\.]/i,  // Positive numbers only.
+            1: /[0-9\.\-]/i // Positive and negative numbers.
+        };
 
-        // Check if the input field includes a negative sign.
-        const hasNegativeSign = this.value.includes('-');
+        const inputValue = this.value; // The current input value.
+        const inputLength = this.value.length; // The current input value length.
 
-        // Gets the input value length.
-        const inputLength = this.value.length;
-
-        // Get the start and end positions of the selected text in the input field.
-        const selectedAll = this.selectionStart === 0 && this.selectionEnd === inputLength;
-
-        if (isRemovalKey) {
-            // If all the text is selected in the input, set the value to 0.
-            if (selectedAll) {
-                e.preventDefault();
-                this.value = "0";
-                convertTemperature();
-            }
-            // If the input has a negative sign or the input length is 1, set the value to 0.
-            else if ((inputLength === 2 && hasNegativeSign) || inputLength === 1) {
-                e.preventDefault();
-                this.value = "0";
-                convertTemperature();
-            }
-        }
-    });
-
-    input1Element.addEventListener("keydown", function (e) {
-        // The current value of the input field.
-        const inputValue = this.value;
-
-        // Check if the pressed key is a number, a decimal point, a negative sign, or one of the allowed keys.
-        const isAllowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key);
-        const isAllowedChar = /[0-9\.\-]/i.test(e.key) || isAllowedKeys;
+        // Check if the pressed key is a decimal point, a negative sign, or one of the allowed keys.
+        const isAllowedKey = ALLOWED_KEYS.includes(e.key);
+        const isAllowedChar = ALLOWED_CHARS[n].test(e.key) || isAllowedKey;
         const isBackspace = e.key === "Backspace";
         const isDelete = e.key === "Delete";
         const isDecimalPoint = e.key === '.';
@@ -407,6 +227,9 @@ function convertTemperature() {
         const hasDecimalPoint = inputValue.includes('.');
         const hasNegativeSign = inputValue.includes('-');
 
+        // Get the start and end positions of the selected text in the input field.
+        const selectedAllText = this.selectionStart === 0 && this.selectionEnd === inputLength;
+
         // Get the selected text within the input field.
         const selectedText = inputValue.substring(this.selectionStart, this.selectionEnd);
 
@@ -415,7 +238,7 @@ function convertTemperature() {
         const selectedIncludesNegative = selectedText.includes('-');
 
         // If the selected text length is equal to the input value length.
-        if (selectedText.length === inputValue.length) {
+        if (selectedAllText) {
             // If "Backspace" or "Delete" keys are pressed.
             if (isBackspace || isDelete) {
                 this.value = "0";
@@ -424,11 +247,7 @@ function convertTemperature() {
             else if (isDecimalPoint) {
                 this.value = "0.";
             }
-            // If a negative sign is entered.
-            else if (isNegativeSign) {
-                this.value = "-0";
-            }
-            convertTemperature();
+            convertInput();
         }
 
         // Prevent input if not a number, decimal point or negative sign.
@@ -437,33 +256,49 @@ function convertTemperature() {
         }
         // If the "Backspace" key is pressed and the Caret is not at the start of the input field
         // or the "Delete" key is pressed and the Caret is not at the end of the input field.
-        else if (isBackspace && this.selectionStart !== 0 || isDelete && this.selectionStart !== inputValue.length) {
-            // If the input value length is 2 and has a negative sign.
-            if (inputValue.length === 2 && hasNegativeSign) {
+        else if (inputLength < 3 && (isBackspace || isDelete)) {
+            // If the input value length is 2 and has a negative sign or decimal point.
+            if (inputValue.length === 2 && (hasNegativeSign || hasDecimalPoint)) {
                 // If the "Backspace" key is pressed.
                 if (isBackspace) {
-                    // If the Caret is in the middle, keep the current value otherwise set it to "0".
-                    this.value = this.selectionStart === 1 ? this.value : "0";
+                    // Example: -1
+                    if (hasNegativeSign) {
+                        // If the Caret is in the middle, remove the negative sign otherwise set it to "0".
+                        this.value = this.selectionStart === 1 ? inputValue.replace('-', '') : "0";
+                    }
+                    // Example: 1. or .1
+                    else if (this.selectionStart === 1 && inputValue.endsWith('.') || this.selectionStart === 2 && inputValue.startsWith('.')) {
+                        // If either condition is true, set the current value to "0".
+                        this.value = "0";
+                    }
+                    e.preventDefault();
                 }
                 // If the "Delete" key is pressed.
                 else if (isDelete) {
-                    // If the Caret is at the start, keep the current value otherwise set it to "0".
-                    this.value = this.selectionStart === 0 ? this.value : "0";
+                    // Example: -2
+                    if (hasNegativeSign) {
+                        // If the Caret is at the start, remove the negative sign otherwise set it to "0".
+                        this.value = this.selectionStart === 0 ? this.value : "0";
+                    }
+                    // Example: 2. or .2
+                    else if (this.selectionStart === 0 && inputValue.endsWith('.') || this.selectionStart === 1 && inputValue.startsWith('.')) {
+                        // If either condition is true, set the current value to "0".
+                        this.value = "0";
+                    }
                 }
-                convertTemperature();
             }
             // If the input value length is 1, set the value to back "0".
             else if (inputValue.length === 1) {
                 e.preventDefault();
                 this.value = "0";
-                convertTemperature();
             }
+            convertInput();
         }
         // Replace the default value "0" on user input.
-        else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKeys) {
+        else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKey) {
             e.preventDefault();
             this.value = inputValue === "0" ? e.key : `-${e.key}`;
-            convertTemperature();
+            convertInput();
         }
         // Prevent users from entering more than one decimal point.
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
@@ -473,10 +308,10 @@ function convertTemperature() {
         else if (isNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
             this.value = `-${inputValue.replace('-', '')}`;
-            convertTemperature();
+            convertInput();
         }
         // Prevent users from entering anything before the negative sign.
-        else if (hasNegativeSign && this.selectionStart === 0 && !isAllowedKeys && !selectedIncludesNegative) {
+        else if (hasNegativeSign && this.selectionStart === 0 && !isAllowedKey && !selectedIncludesNegative) {
             e.preventDefault();
         }
     });
