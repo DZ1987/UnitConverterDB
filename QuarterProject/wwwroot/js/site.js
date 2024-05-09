@@ -12,6 +12,7 @@ const inputName2Element = document.getElementById("inputName2");
 const displayFormulaElement = document.getElementById("formula");
 const displayResultElement = document.getElementById("result");
 const clearButtonElement = document.getElementById("clearButton");
+const convertButtonElement = document.getElementById("convertButton");
 
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
@@ -44,25 +45,50 @@ function updateIconsPath() {
  * Check if on the Conversion pages.
  */
 function checkConversionSupport() {
-    const VALID_PAGES = ["/ConvertLengths", "/ConvertTemperatures"];
-    const validPage = Array.from(VALID_PAGES).some(p => window.location.href.includes(p));
+    // Maps each valid page to its corresponding action and input type.
+    const VALID_PAGES = {
+        "/ConvertCurrencies": {      // The valid page.
+            action: convertCurrency, // Sets the function.
+            inputType: 0             // Sets the input type.
+        },
+        "/ConvertLengths": {
+            action: convertInput,
+            inputType: 0
+        },
+        "/ConvertTemperatures": {
+            action: convertInput,
+            inputType: 1
+        }
+    };
+
+    // Get the current page path name.
     const currentPage = window.location.pathname;
-    const VALID_PAGE_LENGTH = ["/ConvertLengths"];
-    const VALID_PAGE_TEMPURATURE = ["/ConvertTemperatures"];
+
+    // Get the page details from the valid pages mapping.
+    const validPage = VALID_PAGES[currentPage];
 
     if (validPage) {
-        input1Element.addEventListener("input", convertInput);
-        inputName1Element.addEventListener("change", convertInput);
-        inputName2Element.addEventListener("change", convertInput);
+        if (currentPage !== "/ConvertCurrencies") {
+            input1Element.addEventListener("input", validPage.action);
+            inputName1Element.addEventListener("change", validPage.action);
+            inputName2Element.addEventListener("change", validPage.action);
 
-        if (VALID_PAGE_LENGTH.includes(currentPage)) {
-            inputValidation(0);
+            validPage.action();
         }
-        else if (VALID_PAGE_TEMPURATURE.includes(currentPage)) {
-            inputValidation(1);
+        else if (currentPage === "/ConvertCurrencies") {
+            convertButtonElement.addEventListener("click", validPage.action);
+            clearButtonElement.addEventListener("click", clearInput);
+
+            function clearInput() {
+                inputName1.selectedIndex = 0;
+                inputName2.selectedIndex = 0;
+                input1.value = 0;
+                input2.value = 0;
+                result.textContent = null;
+            }
         }
 
-        convertInput();
+        inputValidation(validPage.inputType);
     }
 }
 
@@ -140,6 +166,47 @@ function updateCounts() {
 }
 
 /**
+ * Converts the selected currency to another. Supports 161 commonly circulating
+ * world currencies. These cover 99% of all UN recognized states and territories.
+ */
+function convertCurrency() {
+    // The values from the elements.
+    const input1Value = input1Element.value;
+    const currencyName1 = document.getElementById("inputName1").value;
+    const currencyName2 = document.getElementById("inputName2").value;
+    const currencyCode1 = document.getElementById(currencyName1).value;
+    const currencyCode2 = document.getElementById(currencyName2).value;
+
+    let x = parseFloat(input1Value);
+
+    // If x is Not a Number show the message.
+    if (isNaN(x)) {
+        x = "Enter a valid number";
+        input2Element.value = x;
+        displayResultElement.textContent = x;
+    }
+    else {
+        // Constructs the url for the API request, example: "https://open.er-api.com/v6/latest/USD".
+        const url = `https://open.er-api.com/v6/latest/${currencyCode1}`;
+
+        // Fetch the data from the constructed url API.
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Get the exchange rate for the second currency.
+                const rate = data.rates[currencyCode2];
+
+                // Calculates the converted amount.
+                const convertedAmount = (input1Value * rate).toFixed(2);
+
+                // Display the conversion result.
+                input2Element.value = `${convertedAmount}`;
+                displayResultElement.textContent = `${input1Value} ${currencyName1}(${currencyCode1}) is around ${convertedAmount} ${currencyName2}(${currencyCode2})`;
+            });
+    }
+}
+
+/**
  * Converts the selected input to the selected output.
  */
 function convertInput() {
@@ -202,7 +269,7 @@ function convertInput() {
 
 /**
  * Validate the user entered input by preventing invalid characters from being entered.
- * @param {int} n If the input supports negative numbers: (0 = No, 1 = Yes).
+ * If the input supports negative numbers: (0 = No, 1 = Yes).
  */
 function inputValidation(n) {
     input1Element.addEventListener("keydown", function (e) {

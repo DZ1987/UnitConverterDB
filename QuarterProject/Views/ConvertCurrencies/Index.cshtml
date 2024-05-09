@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ConvertCurrency>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Currency Exchange Rate</h1>
+
+<h3>Get the exchange rate of the <span style="color: green">Selected Currency</span></h3>
+<label>* Most exchange rates are defined as floating and will rise or fall based on the supply and demand in the market.</label>
+<div class="_display-block-ruby">
+    <input id="input1" class="_border-green" value="0">
+    <select id="inputName1" class="_border-green">
+        @foreach (var item in Model.Select(m => m.CurrencyName).Distinct().OrderBy(name => name))
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+    <p>=</p>
+    <input id="input2" class="_border-black" value="0" disabled>
+    <select id="inputName2" class="_border-black">
+        @foreach (var item in Model.Select(m => m.CurrencyName).Distinct().OrderBy(name => name))
+        {
+            <option>@Html.DisplayFor(modelItem => item)</option>
+        }
+    </select>
+</div>
+
+<div class="_display-block-ruby">
+    <lable id="result"></lable>
+</div>
+
+<br>
+<button id="convertButton" class="btn btn-primary">Convert</button>
+<button id="clearButton" class="btn btn-danger">Clear Input</button>
+<br>
+<a href="https://www.exchangerate-api.com">Rates By Exchange Rate API</a>
+
+
+<div class="_invisible">
+    @foreach (var item in Model)
+    {
+        <input id="@Html.DisplayFor(modelItem => item.CurrencyName)" value="@Html.DisplayFor(modelItem => item.CurrencyCode)" disabled>
+        <label>@Html.DisplayFor(modelItem => item.CurrencyName)</label>
+        <br>
+    }
+</div>
