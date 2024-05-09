@@ -10,7 +10,7 @@
 
 <div class="_display-block-ruby">
     <input id="input1" class="_border-green" value="0">
-    <select id="temperatureName1" class="_border-green">
+    <select id="inputName1" class="_border-green">
         @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
@@ -18,7 +18,7 @@
     </select>
     <p>=</p>
     <input id="input2" class="_border-black" disabled>
-    <select id="temperatureName2" class="_border-black">
+    <select id="inputName2" class="_border-black">
         @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
