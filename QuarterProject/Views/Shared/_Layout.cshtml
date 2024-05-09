@@ -22,12 +22,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ConvertLengths" asp-action="Index">ConvertLength</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ConvertTemperatures" asp-action="Index">ConvertTemperature</a>
-                        </li>
+                        <div class="dropdown">
+                            <p class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Convert
+                            </p>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-controller="ConvertLengths" asp-action="Index">ConvertLength</a>
+                                <a class="dropdown-item" asp-controller="ConvertTemperatures" asp-action="Index">ConvertTemperature</a>
+                            </div>
+                        </div>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">
                                 Privacy
