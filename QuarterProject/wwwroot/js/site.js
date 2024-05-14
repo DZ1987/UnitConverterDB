@@ -49,15 +49,18 @@ function checkConversionSupport() {
     const VALID_PAGES = {
         "/ConvertCurrencies": {      // The valid page.
             action: convertCurrency, // Sets the function.
-            inputType: 0             // Sets the input type.
+            allowsNegatives: 0,      // If the input allows negative numbers.
+            allowsLiveUpdates: 0     // If the input allows live updates.
         },
         "/ConvertLengths": {
             action: convertInput,
-            inputType: 0
+            allowsNegatives: 0,
+            allowsLiveUpdates: 1
         },
         "/ConvertTemperatures": {
             action: convertInput,
-            inputType: 1
+            allowsNegatives: 1,
+            allowsLiveUpdates: 1
         }
     };
 
@@ -76,19 +79,22 @@ function checkConversionSupport() {
             validPage.action();
         }
         else if (currentPage === "/ConvertCurrencies") {
+            inputName1.selectedIndex = 151;
+            inputName2.selectedIndex = 151;
+
             convertButtonElement.addEventListener("click", validPage.action);
             clearButtonElement.addEventListener("click", clearInput);
 
             function clearInput() {
-                inputName1.selectedIndex = 0;
-                inputName2.selectedIndex = 0;
+                inputName1.selectedIndex = 151;
+                inputName2.selectedIndex = 151;
                 input1.value = 0;
                 input2.value = 0;
                 result.textContent = null;
             }
         }
 
-        inputValidation(validPage.inputType);
+        inputValidation(validPage.allowsNegatives, validPage.allowsLiveUpdates);
     }
 }
 
@@ -269,30 +275,41 @@ function convertInput() {
 
 /**
  * Validate the user entered input by preventing invalid characters from being entered.
- * If the input supports negative numbers: (0 = No, 1 = Yes).
+ * If the input allows negative numbers: n1 = (0: No, 1: Yes).
+ * If the input allows live updates:     n2 = (0: No, 1: Yes).
  */
-function inputValidation(n) {
-    input1Element.addEventListener("keydown", function (e) {
-        const ALLOWED_KEYS = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
-        const ALLOWED_CHARS = {
-            0: /[0-9\.]/i,  // Positive numbers only.
-            1: /[0-9\.\-]/i // Positive and negative numbers.
-        };
+function inputValidation(n1, n2) {
+    const ALLOWED_KEYS = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+    const ALLOWED_CHARS = {
+        0: /[0-9\.]/i,  // Positive numbers only.
+        1: /[0-9\.\-]/i // Positive and negative numbers.
+    };
 
+    // If the input allows live updates, call convertInput() otherwise do nothing.
+    const updateInput = n2 === 1 ? convertInput : () => { };
+
+    input1Element.addEventListener("keydown", function (e) {
         const inputValue = this.value; // The current input value.
         const inputLength = this.value.length; // The current input value length.
 
         // Check if the pressed key is a decimal point, a negative sign, or one of the allowed keys.
         const isAllowedKey = ALLOWED_KEYS.includes(e.key);
-        const isAllowedChar = ALLOWED_CHARS[n].test(e.key) || isAllowedKey;
+        const isAllowedChar = ALLOWED_CHARS[n1].test(e.key) || isAllowedKey;
         const isBackspace = e.key === "Backspace";
         const isDelete = e.key === "Delete";
         const isDecimalPoint = e.key === '.';
         const isNegativeSign = e.key === '-';
 
-        // Check if the input field includes a decimal point or a negative sign.
+        // Check if the input value includes a decimal point or a negative sign.
         const hasDecimalPoint = inputValue.includes('.');
         const hasNegativeSign = inputValue.includes('-');
+
+        // Check if the input value starts with or ends with a decimal point.
+        const hasDecimalAtStart = inputValue.startsWith('.');
+        const hasDecimalAtEnd = inputValue.endsWith('.');
+
+        // The current index of the Caret.
+        const caretIndex = this.selectionStart;
 
         // Get the start and end positions of the selected text in the input field.
         const selectedAllText = this.selectionStart === 0 && this.selectionEnd === inputLength;
@@ -314,7 +331,7 @@ function inputValidation(n) {
             else if (isDecimalPoint) {
                 this.value = "0.";
             }
-            convertInput();
+            updateInput();
         }
 
         // Prevent input if not a number, decimal point or negative sign.
@@ -323,18 +340,30 @@ function inputValidation(n) {
         }
         // If the "Backspace" key is pressed and the Caret is not at the start of the input field
         // or the "Delete" key is pressed and the Caret is not at the end of the input field.
-        else if (inputLength < 3 && (isBackspace || isDelete)) {
+        else if (inputLength <= 3 && (isBackspace || isDelete)) {
+            // If the input value length is 3 and has a negative sign and a decimal point.
+            if (inputValue.length === 3 && hasNegativeSign && hasDecimalPoint) {
+                // Example: -3. or -.3
+                if (isBackspace && (caretIndex === 2 && hasDecimalAtEnd || caretIndex === 3 && !hasDecimalAtEnd)) {
+                    this.value = "0";
+                }
+                // Example: -4. or -.4
+                else if (isDelete && (caretIndex === 1 && hasDecimalAtEnd || caretIndex === 2 && !hasDecimalAtEnd)) {
+                    this.value = "0";
+                }
+                e.preventDefault();
+            }
             // If the input value length is 2 and has a negative sign or decimal point.
-            if (inputValue.length === 2 && (hasNegativeSign || hasDecimalPoint)) {
+            else if (inputValue.length === 2 && (hasNegativeSign || hasDecimalPoint)) {
                 // If the "Backspace" key is pressed.
                 if (isBackspace) {
                     // Example: -1
                     if (hasNegativeSign) {
                         // If the Caret is in the middle, remove the negative sign otherwise set it to "0".
-                        this.value = this.selectionStart === 1 ? inputValue.replace('-', '') : "0";
+                        this.value = caretIndex === 1 ? inputValue.replace('-', '') : "0";
                     }
                     // Example: 1. or .1
-                    else if (this.selectionStart === 1 && inputValue.endsWith('.') || this.selectionStart === 2 && inputValue.startsWith('.')) {
+                    else if (caretIndex === 1 && hasDecimalAtEnd || caretIndex === 2 && hasDecimalAtStart) {
                         // If either condition is true, set the current value to "0".
                         this.value = "0";
                     }
@@ -345,10 +374,10 @@ function inputValidation(n) {
                     // Example: -2
                     if (hasNegativeSign) {
                         // If the Caret is at the start, remove the negative sign otherwise set it to "0".
-                        this.value = this.selectionStart === 0 ? this.value : "0";
+                        this.value = caretIndex === 0 ? this.value : "0";
                     }
                     // Example: 2. or .2
-                    else if (this.selectionStart === 0 && inputValue.endsWith('.') || this.selectionStart === 1 && inputValue.startsWith('.')) {
+                    else if (caretIndex === 0 && hasDecimalAtEnd || caretIndex === 1 && hasDecimalAtStart) {
                         // If either condition is true, set the current value to "0".
                         this.value = "0";
                     }
@@ -359,13 +388,13 @@ function inputValidation(n) {
                 e.preventDefault();
                 this.value = "0";
             }
-            convertInput();
+            updateInput();
         }
         // Replace the default value "0" on user input.
         else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKey) {
             e.preventDefault();
             this.value = inputValue === "0" ? e.key : `-${e.key}`;
-            convertInput();
+            updateInput();
         }
         // Prevent users from entering more than one decimal point.
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
@@ -375,10 +404,10 @@ function inputValidation(n) {
         else if (isNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
             this.value = `-${inputValue.replace('-', '')}`;
-            convertInput();
+            updateInput();
         }
         // Prevent users from entering anything before the negative sign.
-        else if (hasNegativeSign && this.selectionStart === 0 && !isAllowedKey && !selectedIncludesNegative) {
+        else if (hasNegativeSign && caretIndex === 0 && !isAllowedKey && !selectedIncludesNegative) {
             e.preventDefault();
         }
     });
