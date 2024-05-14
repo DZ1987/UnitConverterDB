@@ -76,12 +76,15 @@ function checkConversionSupport() {
             validPage.action();
         }
         else if (currentPage === "/ConvertCurrencies") {
+            inputName1.selectedIndex = 151;
+            inputName2.selectedIndex = 151;
+
             convertButtonElement.addEventListener("click", validPage.action);
             clearButtonElement.addEventListener("click", clearInput);
 
             function clearInput() {
-                inputName1.selectedIndex = 0;
-                inputName2.selectedIndex = 0;
+                inputName1.selectedIndex = 151;
+                inputName2.selectedIndex = 151;
                 input1.value = 0;
                 input2.value = 0;
                 result.textContent = null;
