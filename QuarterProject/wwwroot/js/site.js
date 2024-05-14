@@ -49,15 +49,18 @@ function checkConversionSupport() {
     const VALID_PAGES = {
         "/ConvertCurrencies": {      // The valid page.
             action: convertCurrency, // Sets the function.
-            inputType: 0             // Sets the input type.
+            allowsNegatives: 0,      // If the input allows negative numbers.
+            allowsLiveUpdates: 0     // If the input allows live updates.
         },
         "/ConvertLengths": {
             action: convertInput,
-            inputType: 0
+            allowsNegatives: 0,
+            allowsLiveUpdates: 1
         },
         "/ConvertTemperatures": {
             action: convertInput,
-            inputType: 1
+            allowsNegatives: 1,
+            allowsLiveUpdates: 1
         }
     };
 
@@ -91,7 +94,7 @@ function checkConversionSupport() {
             }
         }
 
-        inputValidation(validPage.inputType);
+        inputValidation(validPage.allowsNegatives, validPage.allowsLiveUpdates);
     }
 }
 
@@ -272,22 +275,26 @@ function convertInput() {
 
 /**
  * Validate the user entered input by preventing invalid characters from being entered.
- * If the input supports negative numbers: (0 = No, 1 = Yes).
+ * If the input allows negative numbers: n1 = (0: No, 1: Yes).
+ * If the input allows live updates:     n2 = (0: No, 1: Yes).
  */
-function inputValidation(n) {
-    input1Element.addEventListener("keydown", function (e) {
+function inputValidation(n1, n2) {
         const ALLOWED_KEYS = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
         const ALLOWED_CHARS = {
             0: /[0-9\.]/i,  // Positive numbers only.
             1: /[0-9\.\-]/i // Positive and negative numbers.
         };
 
+    // If the input allows live updates, call convertInput() otherwise do nothing.
+    const updateInput = n2 === 1 ? convertInput : () => { };
+
+    input1Element.addEventListener("keydown", function (e) {
         const inputValue = this.value; // The current input value.
         const inputLength = this.value.length; // The current input value length.
 
         // Check if the pressed key is a decimal point, a negative sign, or one of the allowed keys.
         const isAllowedKey = ALLOWED_KEYS.includes(e.key);
-        const isAllowedChar = ALLOWED_CHARS[n].test(e.key) || isAllowedKey;
+        const isAllowedChar = ALLOWED_CHARS[n1].test(e.key) || isAllowedKey;
         const isBackspace = e.key === "Backspace";
         const isDelete = e.key === "Delete";
         const isDecimalPoint = e.key === '.';
@@ -317,7 +324,7 @@ function inputValidation(n) {
             else if (isDecimalPoint) {
                 this.value = "0.";
             }
-            convertInput();
+            updateInput();
         }
 
         // Prevent input if not a number, decimal point or negative sign.
@@ -362,13 +369,13 @@ function inputValidation(n) {
                 e.preventDefault();
                 this.value = "0";
             }
-            convertInput();
+            updateInput();
         }
         // Replace the default value "0" on user input.
         else if ((inputValue === "0" || inputValue === "-0") && !isDecimalPoint && !isNegativeSign && !isAllowedKey) {
             e.preventDefault();
             this.value = inputValue === "0" ? e.key : `-${e.key}`;
-            convertInput();
+            updateInput();
         }
         // Prevent users from entering more than one decimal point.
         else if (isDecimalPoint && hasDecimalPoint && !selectedIncludesDecimal) {
@@ -378,7 +385,7 @@ function inputValidation(n) {
         else if (isNegativeSign && !selectedIncludesNegative) {
             e.preventDefault();
             this.value = `-${inputValue.replace('-', '')}`;
-            convertInput();
+            updateInput();
         }
         // Prevent users from entering anything before the negative sign.
         else if (hasNegativeSign && this.selectionStart === 0 && !isAllowedKey && !selectedIncludesNegative) {
