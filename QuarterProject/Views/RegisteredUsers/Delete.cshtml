@@ -11,11 +11,16 @@
     <h4>RegisteredUser</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserText)
+        <dt>
+            Title:
         </dt>
-        <br>
-        <dd class="col-sm-10">
+        <dd>
+            @Html.DisplayFor(model => model.UserTextTitle)
+        </dd>
+        <dt>
+            Text:
+        </dt>
+        <dd>
             <pre>@Html.DisplayFor(model => model.UserText)</pre>
         </dd>
     </dl>

@@ -35,8 +35,9 @@ textarea {
     border: 1px solid black;
 }
 
-._border-top {
-    border-top: 1px solid black;
+._border-bottom {
+    border-bottom: 1px solid black;
+    margin-bottom: 1em;
 }
 
 ._display-inline {
@@ -65,4 +66,13 @@ pre {
 
 ._border-green {
     border: 2px solid green;
+}
+
+._card-header {
+    background-color: rgba(0,0,0,.03);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+._card-body {
+    padding: 0rem 0.5rem;
 }

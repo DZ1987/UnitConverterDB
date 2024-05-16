@@ -10,20 +10,21 @@
     <h4>RegisteredUser</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserText)
-        </dt>
-        <br>
+        <dt>Title:</dt>
         <dd>
-            <textarea readonly asp-for="UserText" id="userTextArea" class="form-control text-input">
-            <pre>@Html.DisplayFor(model => model.UserText)</pre>
-            </textarea>
+            <input readonly asp-for="UserTextTitle" class="form-control"></input>
+        </dd>
+
+        <dt>Text:</dt>
+        <dd>
+            <textarea readonly asp-for="UserText" id="userTextArea" class="form-control text-input"></textarea>
             <div class="_display-inline">
                 <p id="charCount"></p>
                 <p id="maxChars"></p>
                 <p class="_letter-spacing">Characters</p>
             </div>
             <br>
+
             <div class="_display-inline">
                 <p id="wordCount"></p>
                 <p class="_letter-spacing">Words</p>

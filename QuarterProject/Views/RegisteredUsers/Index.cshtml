@@ -11,29 +11,37 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserText)
-            </th>
-            <th></th>
-        </tr>
     </thead>
     <tbody class="_border">
-        @foreach (var item in Model)
-        {
-            <tr class="_border-top">
-                <td>
-                    <!-- Preserves whitespace and newlines when displaying. -->
-                    <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        @{
+            int i = 0;
+            foreach (RegisteredUser item in Model)
+            {
+                <div id="accordion@(i)">
+                    <div class="card">
+                        <div class="_card-header" id="heading@(i)">
+                            <h5 class="mb-0" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="false" aria-controls="collapse@(i)">
+                                <button class="btn btn-link">
+                                    @Html.DisplayFor(modelItem => item.UserTextTitle)
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapse@(i)" class="collapse" aria-labelledby="heading@(i)" data-parent="#accordion@(i)">
+                            <div class="_card-body">
+                                <div class="_border-bottom">
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </div>
+                                <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                i++;
+            }
         }
     </tbody>
 </table>

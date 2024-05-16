@@ -13,8 +13,16 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UserText" class="control-label"></label>
+                <label asp-for="UserTextTitle" class="control-label">Title:</label>
+                <input asp-for="UserTextTitle" class="form-control" />
+                <span asp-validation-for="UserTextTitle" class="text-danger"></span>
+                <br>
+
+                <label asp-for="UserText" class="control-label">Text:</label>
                 <textarea asp-for="UserText" id="userTextArea" class="form-control text-input"></textarea>
+                <span asp-validation-for="UserText" class="text-danger"></span>
+                <br>
+
                 <div class="_display-inline">
                     <p id="charCount"></p>
                     <p id="maxChars"></p>
@@ -25,8 +33,6 @@
                     <p id="wordCount"></p>
                     <p class="_letter-spacing">Words</p>
                 </div>
-                <br>
-                <span asp-validation-for="UserText" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
