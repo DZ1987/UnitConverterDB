@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuarterProject.Data;
 using QuarterProject.Models;
 
 namespace QuarterProject.Controllers
 {
-    [Authorize(Roles = IdentityHelper.RegisteredUser)]
+	[Authorize(Roles = IdentityHelper.RegisteredUser)]
     public class RegisteredUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -59,7 +54,7 @@ namespace QuarterProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,UserText")] RegisteredUser registeredUser)
+        public async Task<IActionResult> Create([Bind("Id,UserName,UserTextTitle,UserText")] RegisteredUser registeredUser)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +86,7 @@ namespace QuarterProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,UserText")] RegisteredUser registeredUser)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,UserTextTitle,UserText")] RegisteredUser registeredUser)
         {
             if (id != registeredUser.Id)
             {
