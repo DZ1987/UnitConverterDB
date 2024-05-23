@@ -16,6 +16,7 @@ const convertButtonElement = document.getElementById("convertButton");
 
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
+    checkAccordionSupport();
     checkTextAreaSupport();
     checkConversionSupport();
 });
@@ -95,6 +96,37 @@ function checkConversionSupport() {
         }
 
         inputValidation(validPage.allowsNegatives, validPage.allowsLiveUpdates);
+    }
+}
+
+/**
+ * Check if on the RegisteredUsers Index page only.
+ */
+function checkAccordionSupport() {
+    const VALID_PAGES = ["/RegisteredUsers"];
+    const validPage = VALID_PAGES.includes(window.location.pathname);
+
+    if (validPage) {
+        const accordionOpenElement = document.getElementById("accordionOpenAll");
+        const accordionCloseElement = document.getElementById("accordionCloseAll");
+        let accordionElements = Array.from(document.getElementsByClassName("collapse"));
+
+        // Exclude the navigation bar accordion.
+        accordionElements = accordionElements.filter(element => element.id !== "navbarAccordion");
+
+        // If the button is clicked, open all accordions elements in the page.
+        accordionOpenElement.addEventListener("click", () => openAccordion(true));
+
+        // If the button is clicked, close all accordions elements in the page.
+        accordionCloseElement.addEventListener("click", () => openAccordion(false));
+
+        /**
+         * Open or close all accordion elements in the page.
+         * @param {boolean} open If true, open all accordions otherwise close them.
+         */
+        const openAccordion = (open) => {
+            accordionElements.forEach(element => element.classList.toggle("show", open));
+        }
     }
 }
 

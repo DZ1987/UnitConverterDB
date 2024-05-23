@@ -1,8 +1,12 @@
 # QuarterProject
-This website allows users to Create, Retrieve, Update and Delete any text that the User has entered in the Website Database.
+This website allows users to:
+* Convert between two length measurements.
+* Convert between two temperatures units.
+* Get the current exchange rate between currency.
+* Allows users to Create, Retrieve, Update and Delete any text entered in the RegisteredUsers page into the Website Database.
 
 ## Published Website
-Placeholder Link: [QuarterProject Published Website](https://github.com/DZ1987)
+Published Website: [QuarterProject Published Website](https://quarterproject.azurewebsites.net/)
 
 ## Images
 Placeholder Image:

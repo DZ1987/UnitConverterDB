@@ -8,7 +8,7 @@
 
 <h3>Get the exchange rate of the <span style="color: green">Selected Currency</span></h3>
 <label>* Most exchange rates are defined as floating and will rise or fall based on the supply and demand in the market.</label>
-<div class="_display-block-ruby">
+<div>
     <input id="input1" class="_border-green" value="0">
     <select id="inputName1" class="_border-green">
         @foreach (var item in Model.Select(m => m.CurrencyName).Distinct().OrderBy(name => name))
@@ -16,7 +16,9 @@
             <option>@Html.DisplayFor(modelItem => item)</option>
         }
     </select>
-    <p>=</p>
+</div>
+<br>
+<div>
     <input id="input2" class="_border-black" value="0" disabled>
     <select id="inputName2" class="_border-black">
         @foreach (var item in Model.Select(m => m.CurrencyName).Distinct().OrderBy(name => name))
@@ -26,8 +28,8 @@
     </select>
 </div>
 
-<div class="_display-block-ruby">
-    <lable id="result"></lable>
+<div>
+    <p id="result"></p>
 </div>
 
 <br>

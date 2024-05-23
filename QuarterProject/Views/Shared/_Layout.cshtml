@@ -13,20 +13,17 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">QuarterProject</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">QuarterProject</a>
+                <div id="navbarAccordion" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
                         <div class="dropdown">
-                            <p class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Convert
-                            </p>
+                            </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" asp-controller="ConvertCurrencies" asp-action="Index">ConvertCurrency</a>
                                 <a class="dropdown-item" asp-controller="ConvertLengths" asp-action="Index">ConvertLength</a>
@@ -56,7 +53,7 @@
         </nav>
     </header>
 
-    <div class="container">
+	<div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -64,7 +61,7 @@
         <br>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top text-muted">
         <div class="container">
             &copy; 2024 - QuarterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             <a class="back-to-top" href="#">Back to top</a>

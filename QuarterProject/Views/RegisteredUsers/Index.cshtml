@@ -9,6 +9,10 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<button id="accordionOpenAll" class="btn btn-primary">Open All Accordions</button>
+<button id="accordionCloseAll" class="btn btn-danger">Close All Accordions</button>
+
 <table class="table">
     <thead>
     </thead>
@@ -35,7 +39,6 @@
                                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                 </div>
                                 <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>
-
                             </div>
                         </div>
                     </div>

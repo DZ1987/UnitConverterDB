@@ -1,14 +1,5 @@
 html {
     font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-html {
     position: relative;
     min-height: 100%;
 }
@@ -21,11 +12,38 @@ textarea {
     font-family: monospace;
 }
 
+p {
+    margin: 0.5em 0 0.5em 0;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+nav {
+    padding: 0.3em !important;
+}
+
+.dropdown-menu.show {
+    display: inline-block;
+}
+
 .back-to-top {
     float: right;
 }
 
-.text-input {
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    line-height: 30px;
+}
+
+._form-margin-left {
+    margin-left: 1.25em;
+}
+
+._text-input {
     height: 400px;
     width: 100%;
     resize: none;
@@ -46,10 +64,6 @@ textarea {
 
 ._letter-spacing {
     margin-left: 5px;
-}
-
-pre {
-    white-space: pre-wrap;
 }
 
 ._invisible {
@@ -75,4 +89,21 @@ pre {
 
 ._card-body {
     padding: 0rem 0.5rem;
+}
+
+@media (max-width: 575px) {
+    .nav-link {
+        padding-left: 15px !important;
+    }
+    .navbar-brand {
+        position: absolute;
+        left: 3.5em;
+        top: 0.3em;
+    }
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
 }
