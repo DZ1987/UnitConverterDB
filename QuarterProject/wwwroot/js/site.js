@@ -109,7 +109,10 @@ function checkAccordionSupport() {
     if (validPage) {
         const accordionOpenElement = document.getElementById("accordionOpenAll");
         const accordionCloseElement = document.getElementById("accordionCloseAll");
-        const accordionElements = Array.from(document.getElementsByClassName("collapse"));
+        let accordionElements = Array.from(document.getElementsByClassName("collapse"));
+
+        // Exclude the navigation bar accordion.
+        accordionElements = accordionElements.filter(element => element.id !== "navbarAccordion");
 
         // If the button is clicked, open all accordions elements in the page.
         accordionOpenElement.addEventListener("click", () => openAccordion(true));
