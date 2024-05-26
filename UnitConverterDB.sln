@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitConverterDB", "QuarterProject\UnitConverterDB.csproj", "{BEDBF9A5-9806-4B52-AA95-1EB8E6FF62D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitConverterDB", "UnitConverterDB\UnitConverterDB.csproj", "{BEDBF9A5-9806-4B52-AA95-1EB8E6FF62D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
