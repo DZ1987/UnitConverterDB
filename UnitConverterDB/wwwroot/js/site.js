@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 function updateIconsPath() {
     // Document Object Model(DOM) elements.
-    const iconPrivacyElement = document.getElementById("icon-privacy");
+    //const iconPrivacyElement = document.getElementById("icon-privacy");
     const iconUserNotesElement = document.getElementById("icon-userNotes");
     const userStateElement = document.getElementById("userState").textContent;
 
@@ -38,7 +38,7 @@ function updateIconsPath() {
     const iconPath = userStateElement === "Logout" ? iconPathUnocked : iconPathLocked;
 
     // Updates the Icons Path for "Privacy" and "UserNotes" Navigation Links.
-    iconPrivacyElement.setAttribute("d", iconPath);
+    //iconPrivacyElement.setAttribute("d", iconPath);
     iconUserNotesElement.setAttribute("d", iconPath);
 }
 
