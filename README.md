@@ -1,17 +1,17 @@
-# QuarterProject
+# UnitConverterDB
 This website allows users to:
 * Convert between two length measurements.
 * Convert between two temperatures units.
 * Get the current exchange rate between currency.
-* Allows users to Create, Retrieve, Update and Delete any text entered in the RegisteredUsers page into the Website Database.
+* Allows users to Create, Retrieve, Update and Delete any text entered in the UserNotes page into the Website Database.
 
 ## Published Website
-Published Website: [QuarterProject Published Website](https://quarterproject.azurewebsites.net/)
+Published Website: [UnitConverterDB Published Website](https://unitconverterdb.azurewebsites.net/)
 
 ## Images
 Placeholder Image:
 
-![QuarterProject Image](https://placehold.co/200)
+![UnitConverterDB Image](https://placehold.co/200)
 
 ## Requirements
 - [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
