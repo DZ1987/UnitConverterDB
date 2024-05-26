@@ -1,14 +1,14 @@
-name: Build and deploy .NET Core application to Web App QuarterProject
+name: Build and deploy .NET Core application to Web App UnitConverterDB
 on:
   push:
     branches:
     - main
 env:
-  AZURE_WEBAPP_NAME: QuarterProject
-  AZURE_WEBAPP_PACKAGE_PATH: QuarterProject/published
+  AZURE_WEBAPP_NAME: UnitConverterDB
+  AZURE_WEBAPP_PACKAGE_PATH: UnitConverterDB/published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: QuarterProject
+  WORKING_DIRECTORY: UnitConverterDB
 jobs:
   build:
     runs-on: ubuntu-latest
