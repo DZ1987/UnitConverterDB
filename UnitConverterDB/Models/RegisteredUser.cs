@@ -23,12 +23,14 @@ namespace UnitConverterDB.Models
         /// The User entered text title.
         /// </summary>
         [StringLength(40)]
+        [Required(ErrorMessage = "Enter a title.")]
         public required string UserTextTitle { get; set; } = "No Title";
 
         /// <summary>
         /// The User entered text.
         /// </summary>
         [StringLength(1000)]
+        [Required(ErrorMessage = "Enter some text.")]
         public required string UserText { get; set; }
     }
 }
