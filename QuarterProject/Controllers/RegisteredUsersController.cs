@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuarterProject.Data;
-using QuarterProject.Models;
+using UnitConverterDB.Data;
+using UnitConverterDB.Models;
 
-namespace QuarterProject.Controllers
+namespace UnitConverterDB.Controllers
 {
 	[Authorize(Roles = IdentityHelper.RegisteredUser)]
     public class RegisteredUsersController : Controller

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using QuarterProject.Data;
+using UnitConverterDB.Data;
 
 #nullable disable
 
-namespace QuarterProject.Data.Migrations
+namespace UnitConverterDB.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240409041617_Initial")]
@@ -227,7 +227,7 @@ namespace QuarterProject.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("QuarterProject.Models.RegisteredUser", b =>
+            modelBuilder.Entity("UnitConverterDB.Models.RegisteredUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

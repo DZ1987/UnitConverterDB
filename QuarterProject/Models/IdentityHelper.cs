@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 #nullable disable
 
-namespace QuarterProject.Models
+namespace UnitConverterDB.Models
 {
     public static class IdentityHelper
     {

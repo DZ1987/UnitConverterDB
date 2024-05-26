@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuarterProject.Data;
+using UnitConverterDB.Data;
 
-namespace QuarterProject.Controllers
+namespace UnitConverterDB.Controllers
 {
     public class ConvertTemperaturesController : Controller
     {

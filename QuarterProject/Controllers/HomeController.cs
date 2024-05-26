@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuarterProject.Models;
+using UnitConverterDB.Models;
 using System.Diagnostics;
 
-namespace QuarterProject.Controllers
+namespace UnitConverterDB.Controllers
 {
     [Authorize(Roles = IdentityHelper.RegisteredUser)]
     public class HomeController : Controller

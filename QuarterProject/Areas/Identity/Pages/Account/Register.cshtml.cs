@@ -18,9 +18,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using QuarterProject.Models;
+using UnitConverterDB.Models;
 
-namespace QuarterProject.Areas.Identity.Pages.Account
+namespace UnitConverterDB.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
