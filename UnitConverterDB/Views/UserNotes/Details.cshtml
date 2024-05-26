@@ -7,16 +7,15 @@
 <h1>Details</h1>
 
 <div>
-    <h4>RegisteredUser</h4>
     <hr />
     <dl class="row">
-        <dt>Title:</dt>
         <dd>
+            <label>Title:</label>
             <input readonly asp-for="UserTextTitle" class="form-control"></input>
         </dd>
 
-        <dt>Text:</dt>
         <dd>
+            <label>Text:</label>
             <textarea readonly asp-for="UserText" id="userTextArea" class="form-control _text-input"></textarea>
             <div class="_display-inline">
                 <p id="charCount"></p>
@@ -33,6 +32,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-success">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -4,19 +4,19 @@ using UnitConverterDB.Data;
 
 namespace UnitConverterDB.Controllers
 {
-    public class ConvertTemperaturesController : Controller
+    public class ConvertCurrencyController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ConvertTemperaturesController(ApplicationDbContext context)
+        public ConvertCurrencyController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ConvertTemperatures
+        // GET: ConvertCurrency
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ConvertTemperature.ToListAsync());
+            return View(await _context.ConvertCurrency.ToListAsync());
         }
     }
 }
