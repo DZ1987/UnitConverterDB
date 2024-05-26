@@ -7,16 +7,16 @@ using UnitConverterDB.Models;
 namespace UnitConverterDB.Controllers
 {
 	[Authorize(Roles = IdentityHelper.RegisteredUser)]
-    public class RegisteredUsersController : Controller
+    public class UserNotesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public RegisteredUsersController(ApplicationDbContext context)
+        public UserNotesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: RegisteredUsers
+        // GET: UserNotes
         public async Task<IActionResult> Index()
         {
             string? UserIdentityName = @User.Identity?.Name; // The Users Identity Name
@@ -25,7 +25,7 @@ namespace UnitConverterDB.Controllers
             return View(await _context.RegisteredUser.Where(r => r.UserName == UserIdentityName).ToListAsync());
         }
 
-        // GET: RegisteredUsers/Details/5
+        // GET: UserNotes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,13 +43,13 @@ namespace UnitConverterDB.Controllers
             return View(registeredUser);
         }
 
-        // GET: RegisteredUsers/Create
+        // GET: UserNotes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: RegisteredUsers/Create
+        // POST: UserNotes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,7 +65,7 @@ namespace UnitConverterDB.Controllers
             return View(registeredUser);
         }
 
-        // GET: RegisteredUsers/Edit/5
+        // GET: UserNotes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,7 +81,7 @@ namespace UnitConverterDB.Controllers
             return View(registeredUser);
         }
 
-        // POST: RegisteredUsers/Edit/5
+        // POST: UserNotes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,7 +116,7 @@ namespace UnitConverterDB.Controllers
             return View(registeredUser);
         }
 
-        // GET: RegisteredUsers/Delete/5
+        // GET: UserNotes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +134,7 @@ namespace UnitConverterDB.Controllers
             return View(registeredUser);
         }
 
-        // POST: RegisteredUsers/Delete/5
+        // POST: UserNotes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

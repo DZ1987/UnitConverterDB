@@ -1,17 +1,17 @@
-﻿@model IEnumerable<ConvertLength>
+﻿@model IEnumerable<ConvertTemperature>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Convert Temperature</h1>
 
-<h3>Convert the <span style="color: green">Selected Length</span></h3>
+<h3>Convert the <span style="color: green">Selected Temperature</span></h3>
 
 <div>
     <input id="input1" class="_border-green" value="0">
     <select id="inputName1" class="_border-green">
-        @foreach (var item in Model.Select(m => m.LengthName).Distinct())
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
         }
@@ -21,7 +21,7 @@
 <div>
     <input id="input2" class="_border-black" disabled>
     <select id="inputName2" class="_border-black">
-        @foreach (var item in Model.Select(m => m.LengthName).Distinct())
+        @foreach (var item in Model.Select(m => m.TemperatureName).Distinct())
         {
             <option>@Html.DisplayFor(modelItem => item)</option>
         }
@@ -43,8 +43,8 @@
 <div class="_invisible">
     @foreach (var item in Model)
     {
-        <input id="@Html.DisplayFor(modelItem => item.LengthConversion)" value="@Html.DisplayFor(modelItem => item.LengthFormula)" disabled>
-        <label>@Html.DisplayFor(modelItem => item.LengthConversion)</label>
+        <input id="@Html.DisplayFor(modelItem => item.TemperatureConversion)" value="@Html.DisplayFor(modelItem => item.TemperatureFormula)" disabled>
+        <label>@Html.DisplayFor(modelItem => item.TemperatureConversion)</label>
         <br>
     }
 </div>

@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function updateIconsPath() {
     // Document Object Model(DOM) elements.
     const iconPrivacyElement = document.getElementById("icon-privacy");
-    const iconRegisteredUsersElement = document.getElementById("icon-registeredUsers");
+    const iconUserNotesElement = document.getElementById("icon-userNotes");
     const userStateElement = document.getElementById("userState").textContent;
 
     // Icons for the Navigation Links.
@@ -37,9 +37,9 @@ function updateIconsPath() {
     // If the user is logged in, set the icon to unlocked otherwise set it to locked.
     const iconPath = userStateElement === "Logout" ? iconPathUnocked : iconPathLocked;
 
-    // Updates the Icons Path for "Privacy" and "RegisteredUsers" Navigation Links.
+    // Updates the Icons Path for "Privacy" and "UserNotes" Navigation Links.
     iconPrivacyElement.setAttribute("d", iconPath);
-    iconRegisteredUsersElement.setAttribute("d", iconPath);
+    iconUserNotesElement.setAttribute("d", iconPath);
 }
 
 /**
@@ -48,17 +48,17 @@ function updateIconsPath() {
 function checkConversionSupport() {
     // Maps each valid page to its corresponding action and input type.
     const VALID_PAGES = {
-        "/ConvertCurrencies": {      // The valid page.
+        "/ConvertCurrency": {      // The valid page.
             action: convertCurrency, // Sets the function.
             allowsNegatives: 0,      // If the input allows negative numbers.
             allowsLiveUpdates: 0     // If the input allows live updates.
         },
-        "/ConvertLengths": {
+        "/ConvertLength": {
             action: convertInput,
             allowsNegatives: 0,
             allowsLiveUpdates: 1
         },
-        "/ConvertTemperatures": {
+        "/ConvertTemperature": {
             action: convertInput,
             allowsNegatives: 1,
             allowsLiveUpdates: 1
@@ -72,14 +72,14 @@ function checkConversionSupport() {
     const validPage = VALID_PAGES[currentPage];
 
     if (validPage) {
-        if (currentPage !== "/ConvertCurrencies") {
+        if (currentPage !== "/ConvertCurrency") {
             input1Element.addEventListener("input", validPage.action);
             inputName1Element.addEventListener("change", validPage.action);
             inputName2Element.addEventListener("change", validPage.action);
 
             validPage.action();
         }
-        else if (currentPage === "/ConvertCurrencies") {
+        else if (currentPage === "/ConvertCurrency") {
             inputName1.selectedIndex = 151;
             inputName2.selectedIndex = 151;
 
@@ -100,10 +100,10 @@ function checkConversionSupport() {
 }
 
 /**
- * Check if on the RegisteredUsers Index page only.
+ * Check if on the UserNotes Index page only.
  */
 function checkAccordionSupport() {
-    const VALID_PAGES = ["/RegisteredUsers"];
+    const VALID_PAGES = ["/UserNotes"];
     const validPage = VALID_PAGES.includes(window.location.pathname);
 
     if (validPage) {
@@ -131,20 +131,20 @@ function checkAccordionSupport() {
 }
 
 /**
- * Check if on the RegisteredUsers Create, Edit or Details pages.
+ * Check if on the UserNotes Create, Edit or Details pages.
  */
 function checkTextAreaSupport() {
     const VALID_PAGES = ["/Create", "/Edit/", "/Details/"];
     const validPage = Array.from(VALID_PAGES).some(p => window.location.href.includes(p));
 
-    // Only call if on the RegisteredUsers Create, Edit or Details pages.
+    // Only call if on the UserNotes Create, Edit or Details pages.
     if (validPage) {
         addTextAreaSupport();
     }
 }
 
 /**
- * Add <textarea> support if on the RegisteredUsers Create, Edit or Details pages.
+ * Add <textarea> support if on the UserNotes Create, Edit or Details pages.
  */
 function addTextAreaSupport() {
     const MAX_CHARACTERS = 1000; // Sets the maximum amount of characters the User can enter.

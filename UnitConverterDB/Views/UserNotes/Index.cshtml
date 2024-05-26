@@ -4,10 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>User Notes</h1>
 
+<hr />
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Note</a>
 </p>
 
 <button id="accordionOpenAll" class="btn btn-primary">Open All Accordions</button>
@@ -34,9 +35,9 @@
                         <div id="collapse@(i)" class="collapse" aria-labelledby="heading@(i)" data-parent="#accordion@(i)">
                             <div class="_card-body">
                                 <div class="_border-bottom">
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success _button-margin">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary _button-margin">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger _button-margin">Delete</a>
                                 </div>
                                 <pre>@Html.DisplayFor(modelItem => item.UserText)</pre>
                             </div>

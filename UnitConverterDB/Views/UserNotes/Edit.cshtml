@@ -1,51 +1,50 @@
 ﻿@model RegisteredUser
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
-<h4>RegisteredUser</h4>
 <hr />
 <div class="row">
     <div>
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
+
             <div class="form-group">
                 <label asp-for="UserTextTitle" class="control-label">Title:</label>
                 <input asp-for="UserTextTitle" class="form-control" />
                 <span asp-validation-for="UserTextTitle" class="text-danger"></span>
-                <br>
+            </div>
 
+            <div class="form-group">
                 <label asp-for="UserText" class="control-label">Text:</label>
                 <textarea asp-for="UserText" id="userTextArea" class="form-control _text-input"></textarea>
-                <span asp-validation-for="UserText" class="text-danger"></span>
-                <br>
-
                 <div class="_display-inline">
                     <p id="charCount"></p>
                     <p id="maxChars"></p>
                     <p class="_letter-spacing">Characters</p>
                 </div>
                 <br>
+
                 <div class="_display-inline">
                     <p id="wordCount"></p>
                     <p class="_letter-spacing">Words</p>
                 </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <br>
+
+                <span asp-validation-for="UserText" class="text-danger"></span>
             </div>
 
-            <!-- Sets "UserName" to the User Identity Name -->
-            <input type="hidden" asp-for="UserName" value=@User.Identity?.Name />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Index">Back to List</a>
+            </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

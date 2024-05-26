@@ -4,19 +4,19 @@ using UnitConverterDB.Data;
 
 namespace UnitConverterDB.Controllers
 {
-    public class ConvertCurrenciesController : Controller
+    public class ConvertLengthController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ConvertCurrenciesController(ApplicationDbContext context)
+        public ConvertLengthController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ConvertCurrencies
+        // GET: ConvertLength
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ConvertCurrency.ToListAsync());
+            return View(await _context.ConvertLength.ToListAsync());
         }
     }
 }
