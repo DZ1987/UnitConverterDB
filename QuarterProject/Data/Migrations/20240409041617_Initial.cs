@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace QuarterProject.Data.Migrations
+namespace UnitConverterDB.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

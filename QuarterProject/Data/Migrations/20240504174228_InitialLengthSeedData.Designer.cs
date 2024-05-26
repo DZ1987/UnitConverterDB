@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using QuarterProject.Data;
+using UnitConverterDB.Data;
 
 #nullable disable
 
-namespace QuarterProject.Data.Migrations
+namespace UnitConverterDB.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240504174228_InitialLengthSeedData")]
@@ -227,7 +227,7 @@ namespace QuarterProject.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("QuarterProject.Models.ConvertLength", b =>
+            modelBuilder.Entity("UnitConverterDB.Models.ConvertLength", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -646,7 +646,7 @@ namespace QuarterProject.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("QuarterProject.Models.ConvertTemperature", b =>
+            modelBuilder.Entity("UnitConverterDB.Models.ConvertTemperature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -715,7 +715,7 @@ namespace QuarterProject.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("QuarterProject.Models.RegisteredUser", b =>
+            modelBuilder.Entity("UnitConverterDB.Models.RegisteredUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuarterProject.Models
+namespace UnitConverterDB.Models
 {
     /// <summary>
     /// Represents a currency conversion model.

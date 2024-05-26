@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using QuarterProject.Data;
-using QuarterProject.Models;
+using UnitConverterDB.Data;
+using UnitConverterDB.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

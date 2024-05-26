@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace QuarterProject.Data.Migrations
+namespace UnitConverterDB.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCurrencySeedData : Migration

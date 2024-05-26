@@ -1,4 +1,4 @@
-namespace QuarterProject.Models
+namespace UnitConverterDB.Models
 {
     public class ErrorViewModel
     {

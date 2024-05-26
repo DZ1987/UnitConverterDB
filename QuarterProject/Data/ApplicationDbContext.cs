@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using QuarterProject.Models;
+using UnitConverterDB.Models;
 
-namespace QuarterProject.Data
+namespace UnitConverterDB.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
