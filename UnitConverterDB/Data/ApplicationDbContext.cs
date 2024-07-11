@@ -15,6 +15,7 @@ namespace UnitConverterDB.Data
         public DbSet<ConvertCurrency> ConvertCurrency { get; set; }
         public DbSet<ConvertLength> ConvertLength { get; set; }
         public DbSet<ConvertTemperature> ConvertTemperature { get; set; }
+        public DbSet<Statistics> Statistics { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
