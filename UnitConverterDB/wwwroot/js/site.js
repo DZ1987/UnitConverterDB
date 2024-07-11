@@ -486,7 +486,7 @@ function getStatistics(event) {
 
     if (validNumbers()) { // If the number are valid.
         // Convert the numbers from the input field into an array of numbers.
-        let inputNumbers = sortInput(inputNumbersElement.value.split(',').map(Number));
+        let inputNumbers = sortInput(inputNumbersElement.value.split(/[\s,]+/).map(Number));
 
         // Get the various Statistics from the Dataset.
         let inputCount = inputNumbers.length;
@@ -517,7 +517,7 @@ function getStatistics(event) {
      * Check if the input contains only numbers.
      */
     function validNumbers() {
-        let checkNumbers = inputNumbers.value.split(',');
+        let checkNumbers = inputNumbers.value.split(/[\s,]+/);
 
         for (let i = 0; i < checkNumbers.length; i++) {
             if (isNaN(checkNumbers[i])) { // Is Not a Number.
