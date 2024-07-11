@@ -14,11 +14,25 @@ const displayResultElement = document.getElementById("result");
 const clearButtonElement = document.getElementById("clearButton");
 const convertButtonElement = document.getElementById("convertButton");
 
+// Document Object Model(DOM) elements: Statistics page.
+const inputNumbersElement = document.getElementById("inputNumbers");
+const sortButtonElement = document.getElementById("sortButton");
+const numSortedElement = document.getElementById("numSorted");
+const numCountElement = document.getElementById("numCount");
+const numSumElement = document.getElementById("numSum");
+const numMinElement = document.getElementById("numMin");
+const numMaxElement = document.getElementById("numMax");
+const numRangeElement = document.getElementById("numRange");
+const numMeanElement = document.getElementById("numMean");
+const numMedianElement = document.getElementById("numMedian");
+const numModeElement = document.getElementById("numMode");
+
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
     checkTextAreaSupport();
     checkConversionSupport();
+    checkStatisticsSupport();
 });
 
 /**
@@ -96,6 +110,25 @@ function checkConversionSupport() {
         }
 
         inputValidation(validPage.allowsNegatives, validPage.allowsLiveUpdates);
+    }
+}
+
+/**
+* Check if on the Statistics page.
+*/
+function checkStatisticsSupport() {
+    const VALID_PAGE = "/Statistics";
+
+    // Get the current page path name.
+    const currentPage = window.location.pathname;
+
+    if (currentPage === VALID_PAGE) {
+        sortButtonElement.addEventListener("click", getStatistics);
+        clearButtonElement.addEventListener("click", clearInput);
+
+        function clearInput() {
+            inputNumbersElement.textContent = null;
+        }
     }
 }
 
@@ -443,4 +476,124 @@ function inputValidation(n1, n2) {
             e.preventDefault();
         }
     });
+}
+
+/**
+* Gets the Statistics Data from a Dataset.
+*/
+function getStatistics(event) {
+    event.preventDefault();
+
+    if (validNumbers()) { // If the number are valid.
+        // Convert the numbers from the input field into an array of numbers.
+        let inputNumbers = sortInput(inputNumbersElement.value.split(/[\s,]+/).map(Number));
+
+        // Get the various Statistics from the Dataset.
+        let inputCount = inputNumbers.length;
+        let inputSum = getSum(inputNumbers);
+        let inputMin = inputNumbers[0];
+        let inputMax = inputNumbers[inputCount - 1];
+        let inputRange = inputMax - inputMin;
+        let inputMean = inputSum / inputCount;
+        let inputMedian = inputCount % 2 === 0 ? (inputNumbers[inputCount / 2 - 1] + inputNumbers[inputCount / 2]) / 2 : inputNumbers[Math.floor(inputCount / 2)];
+        let inputMode = getMode(inputNumbers);
+
+        // Display the Statistics on the webpage.
+        numSortedElement.textContent = `Sorted: ${inputNumbers.join(", ")}`;
+        numCountElement.textContent = `Count: ${inputCount}`;
+        numSumElement.textContent = `Sum: ${inputSum}`;
+        numMinElement.textContent = `Min: ${inputMin}`;
+        numMaxElement.textContent = `Max: ${inputMax}`;
+        numRangeElement.textContent = `Range: ${inputRange}`;
+        numMeanElement.textContent = `Mean: ${inputMean}`;
+        numMedianElement.textContent = `Median: ${inputMedian}`;
+        numModeElement.textContent = `Mode: ${inputMode}`;
+    }
+    else {
+        alert("inputNumbers contains non-numbers.");
+    }
+
+    /**
+     * Check if the input contains only numbers.
+     */
+    function validNumbers() {
+        let checkNumbers = inputNumbers.value.split(/[\s,]+/);
+
+        for (let i = 0; i < checkNumbers.length; i++) {
+            if (isNaN(checkNumbers[i])) { // Is Not a Number.
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Sorts the Dataset in ascending order.
+     */
+    function sortInput(inputNumbers) {
+        // Sorts the Elements in the Array.
+        let sortedNumbers = inputNumbers.sort(compareNumbers);
+
+        /**
+         * Compares two Numbers.
+         * If the value is less then 0, move 'a' to a lower index than 'b'.
+         */
+        function compareNumbers(a, b) {
+            return a - b;
+        }
+
+        return sortedNumbers;
+    }
+
+    /**
+     * Gets the Sum of the Dataset.
+     */
+    function getSum(inputNumbers) {
+        // Executes a reducer function on each Element of the Array, resulting in a single output value.
+        let inputSum = inputNumbers.reduce(addNumbers, 0);
+
+        /**
+         * Adds two Numbers together.
+         */
+        function addNumbers(a, b) {
+            return a + b;
+        }
+
+        return inputSum;
+    }
+
+    /**
+     * Gets the Mode of the Dataset.
+     * The mode is the number that appears most frequently in a Dataset.
+     */
+    function getMode(inputNumbers) {
+        let counts = {};
+        let mode = [];
+        let maxCount = 0;
+
+        // Count the frequency of each number in the inputNumbers.
+        for (let i = 0; i < inputNumbers.length; i++) {
+            let elmentNumber = inputNumbers[i];
+            counts[elmentNumber] = (counts[elmentNumber] || 0) + 1;
+            if (counts[elmentNumber] > maxCount) {
+                maxCount = counts[elmentNumber];
+            }
+        }
+
+        // Find the numbers that appears most frequently.
+        for (let num in counts) {
+            if (counts[num] === maxCount) {
+                mode.push(Number(num));
+            }
+        }
+
+        // If all numbers appear with the same frequency, there is no mode.
+        if (mode.length === inputNumbers.length) {
+            mode = "No Mode";
+        }
+
+        return mode;
+    }
 }
