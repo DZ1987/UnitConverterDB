@@ -16,9 +16,9 @@ const convertButtonElement = document.getElementById("convertButton");
 
 // Document Object Model(DOM) elements: Statistics page.
 const inputNumbersElement = document.getElementById("inputNumbers");
-const sortButtonElement = document.getElementById("sortButton");
+const getStatisticsButtonElement = document.getElementById("getStatisticsButton");
 const numSortedElement = document.getElementById("numSorted");
-const numCountElement = document.getElementById("numCount");
+const numSizeElement = document.getElementById("numSize");
 const numSumElement = document.getElementById("numSum");
 const numMinElement = document.getElementById("numMin");
 const numMaxElement = document.getElementById("numMax");
@@ -26,6 +26,12 @@ const numRangeElement = document.getElementById("numRange");
 const numMeanElement = document.getElementById("numMean");
 const numMedianElement = document.getElementById("numMedian");
 const numModeElement = document.getElementById("numMode");
+
+const numPopulationDeviationElement = document.getElementById("numPopulationDeviation");
+const numSampleDeviationElement = document.getElementById("numSampleDeviation");
+
+const numPopulationVarianceElement = document.getElementById("numPopulationVariance");
+const numSampleVarianceElement = document.getElementById("numSampleVariance");
 
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
@@ -123,11 +129,25 @@ function checkStatisticsSupport() {
     const currentPage = window.location.pathname;
 
     if (currentPage === VALID_PAGE) {
-        sortButtonElement.addEventListener("click", getStatistics);
+        clearInput();
+        getStatisticsButtonElement.addEventListener("click", getStatistics);
         clearButtonElement.addEventListener("click", clearInput);
 
         function clearInput() {
-            inputNumbersElement.textContent = null;
+            inputNumbersElement.value = null;
+            numSortedElement.textContent = `Sorted:`;
+            numSizeElement.textContent = `Size (n):`;
+            numSumElement.textContent = `Sum (∑):`;
+            numMinElement.textContent = `Min:`;
+            numMaxElement.textContent = `Max:`;
+            numRangeElement.textContent = `Range:`;
+            numMeanElement.textContent = `Mean (μ)(x̄):`;
+            numMedianElement.textContent = `Median:`;
+            numModeElement.textContent = `Mode:`;
+            numPopulationDeviationElement.textContent = `Population Deviation (σ):`;
+            numSampleDeviationElement.textContent = `Sample Deviation (s):`;
+            numPopulationVarianceElement.textContent = `Population Variance (σ²):`;
+            numSampleVarianceElement.textContent = `Sample Variance (s²):`;
         }
     }
 }
@@ -489,25 +509,40 @@ function getStatistics(event) {
         let inputNumbers = sortInput(inputNumbersElement.value.split(/[\s,]+/).map(Number));
 
         // Get the various Statistics from the Dataset.
-        let inputCount = inputNumbers.length;
+        let inputSize = inputNumbers.length;
         let inputSum = getSum(inputNumbers);
         let inputMin = inputNumbers[0];
-        let inputMax = inputNumbers[inputCount - 1];
+        let inputMax = inputNumbers[inputSize - 1];
         let inputRange = inputMax - inputMin;
-        let inputMean = inputSum / inputCount;
-        let inputMedian = inputCount % 2 === 0 ? (inputNumbers[inputCount / 2 - 1] + inputNumbers[inputCount / 2]) / 2 : inputNumbers[Math.floor(inputCount / 2)];
+        let inputMean = inputSum / inputSize;
+        let inputMedian = inputSize % 2 === 0 ? (inputNumbers[inputSize / 2 - 1] + inputNumbers[inputSize / 2]) / 2 : inputNumbers[Math.floor(inputSize / 2)];
         let inputMode = getMode(inputNumbers);
+
+        let sumOfSquaredDifferences = inputNumbers.map(x => Math.pow(x - inputMean, 2)).reduce((a, b) => a + b);
+
+        let inputPopulationDeviation = Math.sqrt(sumOfSquaredDifferences / (inputSize));
+        let inputSampleDeviation = Math.sqrt(sumOfSquaredDifferences / (inputSize - 1));
+
+        let inputPopulationVariance = sumOfSquaredDifferences / (inputSize);
+        let inputSampleVariance = sumOfSquaredDifferences / (inputSize - 1);
+
 
         // Display the Statistics on the webpage.
         numSortedElement.textContent = `Sorted: ${inputNumbers.join(", ")}`;
-        numCountElement.textContent = `Count: ${inputCount}`;
-        numSumElement.textContent = `Sum: ${inputSum}`;
+        numSizeElement.textContent = `Size (n): ${inputSize}`;
+        numSumElement.textContent = `Sum (∑): ${inputSum}`;
         numMinElement.textContent = `Min: ${inputMin}`;
         numMaxElement.textContent = `Max: ${inputMax}`;
         numRangeElement.textContent = `Range: ${inputRange}`;
-        numMeanElement.textContent = `Mean: ${inputMean}`;
+        numMeanElement.textContent = `Mean (μ)(x̄): ${inputMean}`;
         numMedianElement.textContent = `Median: ${inputMedian}`;
         numModeElement.textContent = `Mode: ${inputMode}`;
+
+        numPopulationDeviationElement.textContent = `Population Deviation (σ): ${inputPopulationDeviation}`;
+        numSampleDeviationElement.textContent = `Sample Deviation (s): ${inputSampleDeviation}`;
+
+        numPopulationVarianceElement.textContent = `Population Variance (σ²): ${inputPopulationVariance}`;
+        numSampleVarianceElement.textContent = `Sample Variance (s²): ${inputSampleVariance}`;
     }
     else {
         alert("inputNumbers contains non-numbers.");
@@ -567,6 +602,7 @@ function getStatistics(event) {
     /**
      * Gets the Mode of the Dataset.
      * The mode is the number that appears most frequently in a Dataset.
+     * If there is no mode in the Dataset, return "No Mode".
      */
     function getMode(inputNumbers) {
         let counts = {};
