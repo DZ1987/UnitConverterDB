@@ -11,11 +11,11 @@ namespace UnitConverterDB.Models
         /// The unsorted numbers.
         /// </summary>
         [Key]
-        public string Numbers { get; set; }
+        public string? Numbers { get; set; }
 
         /// <summary>
         /// The sorted numbers.
         /// </summary>
-        public List<int> NumbersSorted { get; set; }
+        public List<int>? NumbersSorted { get; set; }
     }
 }
