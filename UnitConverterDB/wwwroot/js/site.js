@@ -530,13 +530,17 @@ function getStatistics(event) {
         // Display the Statistics on the webpage.
         numSortedElement.textContent = `Sorted: ${inputNumbers.join(", ")}`;
         numSizeElement.textContent = `Size (n): ${inputSize}`;
-        numSumElement.textContent = `Sum (∑): ${inputSum.toFixed(6)}`;
+        numSumElement.textContent = `Sum (∑): ${inputSum.toFixed(6).replace(/\.?0+$/, '')}`;
         numMinElement.textContent = `Min: ${inputMin}`;
         numMaxElement.textContent = `Max: ${inputMax}`;
         numRangeElement.textContent = `Range: ${inputRange}`;
-        numMeanElement.textContent = `Mean (μ)(x̄): ${inputMean.toFixed(6)}`;
+        numMeanElement.textContent = `Mean (μ)(x̄): ${inputMean.toFixed(6).replace(/\.?0+$/, '')}`;
         numMedianElement.textContent = `Median: ${inputMedian}`;
         numModeElement.textContent = `Mode: ${inputMode}`;
+        numPopulationDeviationElement.textContent = `Population Deviation (σ): ${inputPopulationDeviation.toFixed(6).replace(/\.?0+$/, '')}`;
+        numSampleDeviationElement.textContent = `Sample Deviation (s): ${inputSampleDeviation.toFixed(6).replace(/\.?0+$/, '')}`;
+        numPopulationVarianceElement.textContent = `Population Variance (σ²): ${inputPopulationVariance.toFixed(6).replace(/\.?0+$/, '')}`;
+        numSampleVarianceElement.textContent = `Sample Variance (s²): ${inputSampleVariance.toFixed(6).replace(/\.?0+$/, '')}`;
 
         numPopulationDeviationElement.textContent = `Population Deviation (σ): ${inputPopulationDeviation.toFixed(6)}`;
         numSampleDeviationElement.textContent = `Sample Deviation (s): ${inputSampleDeviation.toFixed(6)}`;
