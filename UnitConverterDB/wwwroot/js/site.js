@@ -506,7 +506,7 @@ function getStatistics(event) {
 
     if (validNumbers()) { // If the number are valid.
         // Convert the numbers from the input field into an array of numbers.
-        let inputNumbers = sortInput(inputNumbersElement.value.split(/[\s,]+/).map(Number));
+        let inputNumbers = sortInput(inputNumbersElement.value.trim().split(/[\s,]+/).map(Number));
 
         // Get the various Statistics from the Dataset.
         let inputSize = inputNumbers.length;
