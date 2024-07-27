@@ -34,6 +34,10 @@ const numSampleVarianceElement = document.getElementById("numSampleVariance");
 const numQuartile1Element = document.getElementById("numQuartile1");
 const numQuartile2Element = document.getElementById("numQuartile2");
 const numQuartile3Element = document.getElementById("numQuartile3");
+const numInterquartileRangeElement = document.getElementById("numInterquartileRange");
+const numOutlierLowerElement = document.getElementById("numOutlierLower");
+const numOutlierUpperElement = document.getElementById("numOutlierUpper");
+const numOutliersElement = document.getElementById("numOutliers");
 const numFiveNumberSummaryElement = document.getElementById("numFiveNumberSummary");
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -154,6 +158,10 @@ function checkStatisticsSupport() {
             numQuartile1Element.textContent = `Quartile1 (Q1):`;
             numQuartile2Element.textContent = `Quartile1 (Q2):`;
             numQuartile3Element.textContent = `Quartile1 (Q3):`;
+            numInterquartileRangeElement.textContent = `Interquartile Range (IQR):`;
+            numOutlierLowerElement.textContent = `Outlier Lower Boundary:`;
+            numOutlierUpperElement.textContent = `Outlier Upper Boundary:`;
+            numOutliersElement.textContent = `Outliers:`;
             numFiveNumberSummaryElement.textContent = `Five Number Summary:`;
         }
     }
@@ -535,6 +543,13 @@ function getStatistics() {
         let inputQuartile2 = inputMedian;
         let inputQuartile3 = getMedian(inputDataset.slice(Math.ceil(inputSize / 2)));
 
+        let inputInterquartileRange = inputQuartile3 - inputQuartile1;
+        let inputOutlierLowerBoundary = inputQuartile1 - 1.5 * inputInterquartileRange;
+        let inputOutlierUpperBoundary = inputQuartile3 + 1.5 * inputInterquartileRange;
+        let inputOutliers = inputDataset.filter(x => (x < inputOutlierLowerBoundary || x > inputOutlierUpperBoundary));
+
+        // If outliers is greater than 0 display the outliers otherwise there are no outliers.
+        inputOutliers = inputOutliers.length > 0 ? inputOutliers.join(", ") : "No Outliers";
 
         // Display the Statistics on the webpage.
         numSortedElement.textContent = `Sorted: ${inputDataset.join(", ")}`;
@@ -554,6 +569,10 @@ function getStatistics() {
         numQuartile1Element.textContent = `Quartile 1 (Q1): ${inputQuartile1}`;
         numQuartile2Element.textContent = `Quartile 2 (Q2): ${inputQuartile2}`;
         numQuartile3Element.textContent = `Quartile 3 (Q3): ${inputQuartile3}`;
+        numInterquartileRangeElement.textContent = `Interquartile Range (IQR): ${inputInterquartileRange}`;
+        numOutlierLowerElement.textContent = `Outlier Lower Boundary: ${inputOutlierLowerBoundary}`;
+        numOutlierUpperElement.textContent = `Outlier Upper Boundary: ${inputOutlierUpperBoundary}`;
+        numOutliersElement.textContent = `Outliers: ${inputOutliers}`;
         numFiveNumberSummaryElement.textContent = `Five Number Summary: ${inputMin}, ${inputQuartile1}, ${inputQuartile2}, ${inputQuartile3}, ${inputMax}`;
     }
     else {
