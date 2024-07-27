@@ -15,7 +15,7 @@ const clearButtonElement = document.getElementById("clearButton");
 const convertButtonElement = document.getElementById("convertButton");
 
 // Document Object Model(DOM) elements: Statistics page.
-const inputNumbersElement = document.getElementById("inputNumbers");
+const inputDatasetElement = document.getElementById("inputDataset");
 const getStatisticsButtonElement = document.getElementById("getStatisticsButton");
 const numSortedElement = document.getElementById("numSorted");
 const numSizeElement = document.getElementById("numSize");
@@ -26,12 +26,19 @@ const numRangeElement = document.getElementById("numRange");
 const numMeanElement = document.getElementById("numMean");
 const numMedianElement = document.getElementById("numMedian");
 const numModeElement = document.getElementById("numMode");
-
 const numPopulationDeviationElement = document.getElementById("numPopulationDeviation");
 const numSampleDeviationElement = document.getElementById("numSampleDeviation");
-
 const numPopulationVarianceElement = document.getElementById("numPopulationVariance");
 const numSampleVarianceElement = document.getElementById("numSampleVariance");
+
+const numQuartile1Element = document.getElementById("numQuartile1");
+const numQuartile2Element = document.getElementById("numQuartile2");
+const numQuartile3Element = document.getElementById("numQuartile3");
+const numInterquartileRangeElement = document.getElementById("numInterquartileRange");
+const numOutlierLowerElement = document.getElementById("numOutlierLower");
+const numOutlierUpperElement = document.getElementById("numOutlierUpper");
+const numOutliersElement = document.getElementById("numOutliers");
+const numFiveNumberSummaryElement = document.getElementById("numFiveNumberSummary");
 
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
@@ -134,7 +141,7 @@ function checkStatisticsSupport() {
         clearButtonElement.addEventListener("click", clearInput);
 
         function clearInput() {
-            inputNumbersElement.value = null;
+            inputDatasetElement.value = null;
             numSortedElement.textContent = `Sorted:`;
             numSizeElement.textContent = `Size (n):`;
             numSumElement.textContent = `Sum (∑):`;
@@ -148,6 +155,14 @@ function checkStatisticsSupport() {
             numSampleDeviationElement.textContent = `Sample Deviation (s):`;
             numPopulationVarianceElement.textContent = `Population Variance (σ²):`;
             numSampleVarianceElement.textContent = `Sample Variance (s²):`;
+            numQuartile1Element.textContent = `Quartile1 (Q1):`;
+            numQuartile2Element.textContent = `Quartile1 (Q2):`;
+            numQuartile3Element.textContent = `Quartile1 (Q3):`;
+            numInterquartileRangeElement.textContent = `Interquartile Range (IQR):`;
+            numOutlierLowerElement.textContent = `Outlier Lower Boundary:`;
+            numOutlierUpperElement.textContent = `Outlier Upper Boundary:`;
+            numOutliersElement.textContent = `Outliers:`;
+            numFiveNumberSummaryElement.textContent = `Five Number Summary:`;
         }
     }
 }
@@ -501,58 +516,74 @@ function inputValidation(n1, n2) {
 /**
 * Gets the Statistics Data from a Dataset.
 */
-function getStatistics(event) {
-    event.preventDefault();
+function getStatistics() {
 
-    if (validNumbers()) { // If the number are valid.
-        // Convert the numbers from the input field into an array of numbers.
-        let inputNumbers = sortInput(inputNumbersElement.value.split(/[\s,]+/).map(Number));
+    if (validNumbers()) { // If the Dataset contains valid numbers.
+        // Convert the numbers from the Dataset input field into an array of numbers.
+        let inputDataset = sortDataset(inputDatasetElement.value.trim().split(/[\s,]+/).map(Number));
 
         // Get the various Statistics from the Dataset.
-        let inputSize = inputNumbers.length;
-        let inputSum = getSum(inputNumbers);
-        let inputMin = inputNumbers[0];
-        let inputMax = inputNumbers[inputSize - 1];
+        let inputSize = inputDataset.length;
+        let inputSum = getSum(inputDataset);
+        let inputMin = inputDataset[0];
+        let inputMax = inputDataset[inputSize - 1];
         let inputRange = inputMax - inputMin;
         let inputMean = inputSum / inputSize;
-        let inputMedian = inputSize % 2 === 0 ? (inputNumbers[inputSize / 2 - 1] + inputNumbers[inputSize / 2]) / 2 : inputNumbers[Math.floor(inputSize / 2)];
-        let inputMode = getMode(inputNumbers);
+        let inputMedian = getMedian(inputDataset);
+        let inputMode = getMode(inputDataset);
 
-        let sumOfSquaredDifferences = inputNumbers.map(x => Math.pow(x - inputMean, 2)).reduce((a, b) => a + b);
-
+        // Get the sum of squared differences for Deviation/Variance.
+        let sumOfSquaredDifferences = inputDataset.map(x => Math.pow(x - inputMean, 2)).reduce((a, b) => a + b);
         let inputPopulationDeviation = Math.sqrt(sumOfSquaredDifferences / (inputSize));
         let inputSampleDeviation = Math.sqrt(sumOfSquaredDifferences / (inputSize - 1));
-
         let inputPopulationVariance = sumOfSquaredDifferences / (inputSize);
         let inputSampleVariance = sumOfSquaredDifferences / (inputSize - 1);
 
+        let inputQuartile1 = getMedian(inputDataset.slice(0, Math.floor(inputSize / 2)));
+        let inputQuartile2 = inputMedian;
+        let inputQuartile3 = getMedian(inputDataset.slice(Math.ceil(inputSize / 2)));
+
+        let inputInterquartileRange = inputQuartile3 - inputQuartile1;
+        let inputOutlierLowerBoundary = inputQuartile1 - 1.5 * inputInterquartileRange;
+        let inputOutlierUpperBoundary = inputQuartile3 + 1.5 * inputInterquartileRange;
+        let inputOutliers = inputDataset.filter(x => (x < inputOutlierLowerBoundary || x > inputOutlierUpperBoundary));
+
+        // If outliers is greater than 0 display the outliers otherwise there are no outliers.
+        inputOutliers = inputOutliers.length > 0 ? inputOutliers.join(", ") : "No Outliers";
 
         // Display the Statistics on the webpage.
-        numSortedElement.textContent = `Sorted: ${inputNumbers.join(", ")}`;
+        numSortedElement.textContent = `Sorted: ${inputDataset.join(", ")}`;
         numSizeElement.textContent = `Size (n): ${inputSize}`;
-        numSumElement.textContent = `Sum (∑): ${inputSum}`;
+        numSumElement.textContent = `Sum (∑): ${inputSum.toFixed(6).replace(/\.?0+$/, '')}`;
         numMinElement.textContent = `Min: ${inputMin}`;
         numMaxElement.textContent = `Max: ${inputMax}`;
         numRangeElement.textContent = `Range: ${inputRange}`;
-        numMeanElement.textContent = `Mean (μ)(x̄): ${inputMean}`;
+        numMeanElement.textContent = `Mean (μ)(x̄): ${inputMean.toFixed(6).replace(/\.?0+$/, '')}`;
         numMedianElement.textContent = `Median: ${inputMedian}`;
         numModeElement.textContent = `Mode: ${inputMode}`;
+        numPopulationDeviationElement.textContent = `Population Deviation (σ): ${inputPopulationDeviation.toFixed(6).replace(/\.?0+$/, '')}`;
+        numSampleDeviationElement.textContent = `Sample Deviation (s): ${inputSampleDeviation.toFixed(6).replace(/\.?0+$/, '')}`;
+        numPopulationVarianceElement.textContent = `Population Variance (σ²): ${inputPopulationVariance.toFixed(6).replace(/\.?0+$/, '')}`;
+        numSampleVarianceElement.textContent = `Sample Variance (s²): ${inputSampleVariance.toFixed(6).replace(/\.?0+$/, '')}`;
 
-        numPopulationDeviationElement.textContent = `Population Deviation (σ): ${inputPopulationDeviation}`;
-        numSampleDeviationElement.textContent = `Sample Deviation (s): ${inputSampleDeviation}`;
-
-        numPopulationVarianceElement.textContent = `Population Variance (σ²): ${inputPopulationVariance}`;
-        numSampleVarianceElement.textContent = `Sample Variance (s²): ${inputSampleVariance}`;
+        numQuartile1Element.textContent = `Quartile 1 (Q1): ${inputQuartile1}`;
+        numQuartile2Element.textContent = `Quartile 2 (Q2): ${inputQuartile2}`;
+        numQuartile3Element.textContent = `Quartile 3 (Q3): ${inputQuartile3}`;
+        numInterquartileRangeElement.textContent = `Interquartile Range (IQR): ${inputInterquartileRange}`;
+        numOutlierLowerElement.textContent = `Outlier Lower Boundary: ${inputOutlierLowerBoundary}`;
+        numOutlierUpperElement.textContent = `Outlier Upper Boundary: ${inputOutlierUpperBoundary}`;
+        numOutliersElement.textContent = `Outliers: ${inputOutliers}`;
+        numFiveNumberSummaryElement.textContent = `Five Number Summary: ${inputMin}, ${inputQuartile1}, ${inputQuartile2}, ${inputQuartile3}, ${inputMax}`;
     }
     else {
-        alert("inputNumbers contains non-numbers.");
+        alert("Dataset must contain valid numbers.");
     }
 
     /**
-     * Check if the input contains only numbers.
+     * Check if the input contains only valid numbers.
      */
     function validNumbers() {
-        let checkNumbers = inputNumbers.value.split(/[\s,]+/);
+        let checkNumbers = inputDataset.value.split(/[\s,]+/);
 
         for (let i = 0; i < checkNumbers.length; i++) {
             if (isNaN(checkNumbers[i])) { // Is Not a Number.
@@ -567,9 +598,9 @@ function getStatistics(event) {
     /**
      * Sorts the Dataset in ascending order.
      */
-    function sortInput(inputNumbers) {
-        // Sorts the Elements in the Array.
-        let sortedNumbers = inputNumbers.sort(compareNumbers);
+    function sortDataset(inputDataset) {
+        // Sorts the Elements in the Dataset.
+        let sortedNumbers = inputDataset.sort(compareNumbers);
 
         /**
          * Compares two Numbers.
@@ -585,33 +616,49 @@ function getStatistics(event) {
     /**
      * Gets the Sum of the Dataset.
      */
-    function getSum(inputNumbers) {
+    function getSum(inputDataset) {
         // Executes a reducer function on each Element of the Array, resulting in a single output value.
-        let inputSum = inputNumbers.reduce(addNumbers, 0);
+        let sum = inputDataset.reduce(addNumbers, 0);
 
         /**
-         * Adds two Numbers together.
+         * Adds 'a' and 'b' values together.
          */
         function addNumbers(a, b) {
             return a + b;
         }
 
-        return inputSum;
+        return sum;
     }
 
     /**
-     * Gets the Mode of the Dataset.
-     * The mode is the number that appears most frequently in a Dataset.
-     * If there is no mode in the Dataset, return "No Mode".
+     * Gets the Median from the Dataset.
+     * The median is the center value in the dataset.
+     * If the dataset size is odd, the median is the center value.
+     * If the dataset size is even, the median is the average of the 2 center values.
      */
-    function getMode(inputNumbers) {
+    function getMedian(inputDataset) {
+        let size = inputDataset.length;
+        let mid = Math.floor(size / 2);
+
+        // If the dataset is even, the median is the average of the 2 center values, otherwise the median is the center value.
+        let median = size % 2 === 0 ? (inputDataset[mid - 1] + inputDataset[mid]) / 2 : inputDataset[mid];
+
+        return median;
+    }
+
+    /**
+     * Gets the Mode from the Dataset.
+     * The mode is the number that appears most frequently in the Dataset.
+     * If all numbers in the dataset appear with the same frequency, return "No Mode".
+     */
+    function getMode(inputDataset) {
         let counts = {};
         let mode = [];
         let maxCount = 0;
 
-        // Count the frequency of each number in the inputNumbers.
-        for (let i = 0; i < inputNumbers.length; i++) {
-            let elmentNumber = inputNumbers[i];
+        // Count the frequency of each number in the inputDataset.
+        for (let i = 0; i < inputDataset.length; i++) {
+            let elmentNumber = inputDataset[i];
             counts[elmentNumber] = (counts[elmentNumber] || 0) + 1;
             if (counts[elmentNumber] > maxCount) {
                 maxCount = counts[elmentNumber];
@@ -626,7 +673,7 @@ function getStatistics(event) {
         }
 
         // If all numbers appear with the same frequency, there is no mode.
-        if (mode.length === inputNumbers.length) {
+        if (mode.length === inputDataset.length) {
             mode = "No Mode";
         }
 
