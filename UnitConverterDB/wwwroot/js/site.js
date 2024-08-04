@@ -745,8 +745,24 @@ function getZScore() {
         alert("Enter some numbers.");
     }
 }
-}
-}
+
+/**
+ * Get the p-value from the z-score.
+ */
+function getPValues(zScore) {
+    // Calculates the Cumulative Distribution Function (CDF) for the z-score.
+    const cdf = jStat.normal.cdf(zScore, 0, 1);
+
+    const pValueLeftTailed = cdf;
+    const pValueRightTailed = 1 - cdf;
+    const pValueTwoTailed = 2 * (1 - jStat.normal.cdf(Math.abs(zScore), 0, 1));
+    const pValueBetween = 1 - pValueTwoTailed;
+
+    // Display the P-Value results on the webpage.
+    numPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < Z): ${pValueLeftTailed}`;
+    numPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > Z): ${pValueRightTailed}`;
+    numPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -Z or x > Z): ${pValueTwoTailed}`;
+    numPValueBetweenElement.textContent = `P-Value - Between (-Z < x < Z): ${pValueBetween}`;
         }
 
         return mode;
