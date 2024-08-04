@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Statistics>
+
+@{
+    ViewData["Title"] = "Get Z-Score";
+}
+
+<h1>Get Z-Score</h1>
+
+<div class="form-group">
+	<div>
+		<label class="control-label">Sample (x):</label>
+		<input id="inputZScoreX" class="form-control">
+        <label class="control-label">Mean (μ):</label>
+		<input id="inputZScoreMean" class="form-control">
+        <label class="control-label">Deviation (s):</label>
+		<input id="inputZScoreDeviation" class="form-control">
+		<span class="text-danger"></span>
+		<button id="getZScoreButton" class="btn btn-primary">Get Z-Score</button>
+        <button id="clearButton" class="btn btn-danger">Clear Entries</button>
+	</div>
+
+    <div>
+        <p id="numX"></p>
+        <p id="numZScore"></p>
+        <p id="numPValueLeftTailed"></p>
+        <p id="numPValueRightTailed"></p>
+        <p id="numPValueTwoTailed"></p>
+        <p id="numPValueBetween"></p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
