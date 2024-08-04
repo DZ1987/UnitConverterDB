@@ -40,12 +40,26 @@ const numOutlierUpperElement = document.getElementById("numOutlierUpper");
 const numOutliersElement = document.getElementById("numOutliers");
 const numFiveNumberSummaryElement = document.getElementById("numFiveNumberSummary");
 
+
+// Document Object Model(DOM) elements: GetZScore page.
+const inputZScoreXElement = document.getElementById("inputZScoreX");
+const inputZScoreMeanElement = document.getElementById("inputZScoreMean");
+const inputZScoreDeviationElement = document.getElementById("inputZScoreDeviation");
+const getZScoreButtonElement = document.getElementById("getZScoreButton");
+const numXElement = document.getElementById("numX");
+const numZScoreElement = document.getElementById("numZScore");
+const numPValueLeftTailedElement = document.getElementById("numPValueLeftTailed");
+const numPValueRightTailedElement = document.getElementById("numPValueRightTailed");
+const numPValueTwoTailedElement = document.getElementById("numPValueTwoTailed");
+const numPValueBetweenElement = document.getElementById("numPValueBetween");
+
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
     checkTextAreaSupport();
     checkConversionSupport();
     checkStatisticsSupport();
+    checkGetZScoreSupport();
 });
 
 /**
@@ -130,40 +144,66 @@ function checkConversionSupport() {
 * Check if on the Statistics page.
 */
 function checkStatisticsSupport() {
-    const VALID_PAGE = "/Statistics";
+    // Get the current page path name.
+    const currentPage = window.location.pathname;
+
+    if (currentPage === "/Statistics") {
+        clearInput();
+        getStatisticsButtonElement.addEventListener("click", getStatistics);
+        clearButtonElement.addEventListener("click", clearInput);
+    }
+
+    function clearInput() {
+        inputDatasetElement.value = null;
+        numSortedElement.textContent = `Sorted:`;
+        numSizeElement.textContent = `Size (n):`;
+        numSumElement.textContent = `Sum (∑):`;
+        numMinElement.textContent = `Min:`;
+        numMaxElement.textContent = `Max:`;
+        numRangeElement.textContent = `Range:`;
+        numMeanElement.textContent = `Mean (μ)(x̄):`;
+        numMedianElement.textContent = `Median:`;
+        numModeElement.textContent = `Mode:`;
+        numPopulationDeviationElement.textContent = `Population Deviation (σ):`;
+        numSampleDeviationElement.textContent = `Sample Deviation (s):`;
+        numPopulationVarianceElement.textContent = `Population Variance (σ²):`;
+        numSampleVarianceElement.textContent = `Sample Variance (s²):`;
+        numQuartile1Element.textContent = `Quartile 1 (Q1):`;
+        numQuartile2Element.textContent = `Quartile 2 (Q2):`;
+        numQuartile3Element.textContent = `Quartile 3 (Q3):`;
+        numInterquartileRangeElement.textContent = `Interquartile Range (IQR):`;
+        numOutlierLowerElement.textContent = `Outlier Lower Boundary:`;
+        numOutlierUpperElement.textContent = `Outlier Upper Boundary:`;
+        numOutliersElement.textContent = `Outliers:`;
+        numFiveNumberSummaryElement.textContent = `Five Number Summary:`;
+    }
+}
+
+/**
+* Check if on the GetZScore page.
+*/
+function checkGetZScoreSupport() {
+    const VALID_PAGE = "/Statistics/GetZScore";
 
     // Get the current page path name.
     const currentPage = window.location.pathname;
 
     if (currentPage === VALID_PAGE) {
         clearInput();
-        getStatisticsButtonElement.addEventListener("click", getStatistics);
+        getZScoreButtonElement.addEventListener("click", getZScore);
         clearButtonElement.addEventListener("click", clearInput);
+    }
 
-        function clearInput() {
-            inputDatasetElement.value = null;
-            numSortedElement.textContent = `Sorted:`;
-            numSizeElement.textContent = `Size (n):`;
-            numSumElement.textContent = `Sum (∑):`;
-            numMinElement.textContent = `Min:`;
-            numMaxElement.textContent = `Max:`;
-            numRangeElement.textContent = `Range:`;
-            numMeanElement.textContent = `Mean (μ)(x̄):`;
-            numMedianElement.textContent = `Median:`;
-            numModeElement.textContent = `Mode:`;
-            numPopulationDeviationElement.textContent = `Population Deviation (σ):`;
-            numSampleDeviationElement.textContent = `Sample Deviation (s):`;
-            numPopulationVarianceElement.textContent = `Population Variance (σ²):`;
-            numSampleVarianceElement.textContent = `Sample Variance (s²):`;
-            numQuartile1Element.textContent = `Quartile1 (Q1):`;
-            numQuartile2Element.textContent = `Quartile1 (Q2):`;
-            numQuartile3Element.textContent = `Quartile1 (Q3):`;
-            numInterquartileRangeElement.textContent = `Interquartile Range (IQR):`;
-            numOutlierLowerElement.textContent = `Outlier Lower Boundary:`;
-            numOutlierUpperElement.textContent = `Outlier Upper Boundary:`;
-            numOutliersElement.textContent = `Outliers:`;
-            numFiveNumberSummaryElement.textContent = `Five Number Summary:`;
-        }
+    function clearInput() {
+        inputZScoreXElement.value = null;
+        inputZScoreMeanElement.value = null;
+        inputZScoreDeviationElement.value = null;
+        numXElement.textContent = `Sample (x):`;
+        numZScoreElement.textContent = `Z-Score (Z):`;
+        numPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < Z):`;
+        numPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > Z):`;
+        numPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -Z or x > Z)`;
+        numPValueBetweenElement.textContent = `P-Value - Between (-Z < x < Z):`;
     }
 }
 
@@ -517,10 +557,11 @@ function inputValidation(n1, n2) {
 * Gets the Statistics Data from a Dataset.
 */
 function getStatistics() {
+    const dataset = inputDatasetElement.value.trim();
 
-    if (validNumbers()) { // If the Dataset contains valid numbers.
+    if (validNumbers(0)) { // If the Dataset contains valid numbers.
         // Convert the numbers from the Dataset input field into an array of numbers.
-        let inputDataset = sortDataset(inputDatasetElement.value.trim().split(/[\s,]+/).map(Number));
+        let inputDataset = sortDataset(dataset.split(/[\s,]+/).map(Number));
 
         // Get the various Statistics from the Dataset.
         let inputSize = inputDataset.length;
@@ -576,24 +617,9 @@ function getStatistics() {
         numFiveNumberSummaryElement.textContent = `Five Number Summary: ${inputMin}, ${inputQuartile1}, ${inputQuartile2}, ${inputQuartile3}, ${inputMax}`;
     }
     else {
-        alert("Dataset must contain valid numbers.");
+        // If the dataset is empty or invalid.
+        alert("The Dataset must contain valid numbers.");
     }
-
-    /**
-     * Check if the input contains only valid numbers.
-     */
-    function validNumbers() {
-        let checkNumbers = inputDataset.value.split(/[\s,]+/);
-
-        for (let i = 0; i < checkNumbers.length; i++) {
-            if (isNaN(checkNumbers[i])) { // Is Not a Number.
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 
     /**
      * Sorts the Dataset in ascending order.
@@ -658,10 +684,11 @@ function getStatistics() {
 
         // Count the frequency of each number in the inputDataset.
         for (let i = 0; i < inputDataset.length; i++) {
-            let elmentNumber = inputDataset[i];
-            counts[elmentNumber] = (counts[elmentNumber] || 0) + 1;
-            if (counts[elmentNumber] > maxCount) {
-                maxCount = counts[elmentNumber];
+            let elementNumber = inputDataset[i];
+            counts[elementNumber] = (counts[elementNumber] || 0) + 1;
+
+            if (counts[elementNumber] > maxCount) {
+                maxCount = counts[elementNumber];
             }
         }
 
@@ -673,10 +700,80 @@ function getStatistics() {
         }
 
         // If all numbers appear with the same frequency, there is no mode.
-        if (mode.length === inputDataset.length) {
-            mode = "No Mode";
-        }
+        mode = (mode.length === inputDataset.length) ? "No Mode" : mode.join(", ");
 
         return mode;
     }
+}
+
+
+/**
+ * Get the z-score from the sample, mean, and standard deviation
+ * then get the p-values.
+ */
+function getZScore() {
+
+    if (validNumbers(1)) {
+        let x = inputZScoreXElement.value;
+        let mean = inputZScoreMeanElement.value;
+        let deviation = inputZScoreDeviationElement.value;
+        let zScore = (x - mean) / deviation;
+
+        // Display the Z-Score result on the webpage.
+        numXElement.textContent = `Sample (x) = ${x}`;
+        numZScoreElement.textContent = `Z-Score (Z) = ${zScore}`;
+
+        getPValues(zScore);
+    }
+    else {
+        alert("Enter some numbers.");
+    }
+}
+
+/**
+ * Get the p-value from the z-score.
+ */
+function getPValues(zScore) {
+    // Calculates the Cumulative Distribution Function (CDF) for the z-score.
+    const cdf = jStat.normal.cdf(zScore, 0, 1);
+
+    const pValueLeftTailed = cdf;
+    const pValueRightTailed = 1 - cdf;
+    const pValueTwoTailed = 2 * (1 - jStat.normal.cdf(Math.abs(zScore), 0, 1));
+    const pValueBetween = 1 - pValueTwoTailed;
+
+    // Display the P-Value results on the webpage.
+    numPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < Z): ${pValueLeftTailed}`;
+    numPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > Z): ${pValueRightTailed}`;
+    numPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -Z or x > Z): ${pValueTwoTailed}`;
+    numPValueBetweenElement.textContent = `P-Value - Between (-Z < x < Z): ${pValueBetween}`;
+}
+
+/**
+ * Check if the input(s) contains valid numbers.
+ * If n = 0, for the Statistics page.
+ * If n = 1, for the GetZScore page.
+ */
+function validNumbers(n) {
+    if (n === 0) { // Statistics page.
+        let checkNumbers1 = inputDataset.value.trim().split(/[\s,]+/);
+
+        // If the dataset contains no numbers.
+        if (checkNumbers1.length === 0 || checkNumbers1[0] === "") {
+            return false;
+        }
+
+        // Check if all the elements are numbers.
+        return checkNumbers1.every(num => !isNaN(Number(num)));
+    }
+    else if (n === 1) { // GetZScore page.
+        let checkNumbers1 = inputZScoreXElement.value;
+        let checkNumbers2 = inputZScoreMeanElement.value;
+        let checkNumbers3 = inputZScoreDeviationElement.value;
+
+        // Check if any of the inputs are empty or not numbers.
+        return [checkNumbers1, checkNumbers2, checkNumbers3].every(num => num !== "" && !isNaN(Number(num)));
+    }
+
+    return true;
 }

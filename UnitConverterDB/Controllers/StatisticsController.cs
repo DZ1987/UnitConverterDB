@@ -18,5 +18,11 @@ namespace UnitConverterDB.Controllers
         {
             return View(await _context.Statistics.ToListAsync());
         }
+
+        // GET: GetZScore
+        public async Task<IActionResult> GetZScore()
+        {
+            return View(await _context.Statistics.ToListAsync());
+        }
     }
 }

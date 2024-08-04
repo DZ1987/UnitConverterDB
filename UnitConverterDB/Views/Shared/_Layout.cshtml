@@ -30,9 +30,15 @@
                                 <a class="dropdown-item" asp-controller="ConvertTemperature" asp-action="Index">Temperature</a>
                             </div>
                         </div>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
-                        </li>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Statistics
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-controller="Statistics" asp-action="Index">Statistics</a>
+                                <a class="dropdown-item" asp-controller="Statistics" asp-action="GetZScore">Get Z-Score</a>
+                            </div>
+                        </div>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="UserNotes" asp-action="Index">
                                 User Notes
