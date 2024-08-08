@@ -25,12 +25,12 @@
 
 				<div>
 					<span id="errorZScore" class="text-danger">*</span>
-					<p id="resultX">Sample (x̄):</p>
-					<p id="resultZScore">Z-Score (Z):</p>
-					<p id="resultPValueLeftTailed">P-Value - Left-Tailed (x̄ < Z):</p>
-					<p id="resultPValueRightTailed">P-Value - Right-Tailed (x̄ > Z):</p>
-					<p id="resultPValueTwoTailed">P-Value - Two-Tailed (x̄ < -Z or x > Z):</p>
-					<p id="resultPValueBetween">P-Value - Between (-Z < x̄ < Z):</p>
+					<p id="resultX">Raw Score (x):</p>
+					<p id="resultZScore">Z-Score (z):</p>
+					<p id="resultPValueLeftTailed">P-Value - Left-Tailed (x < z):</p>
+					<p id="resultPValueRightTailed">P-Value - Right-Tailed (x > z):</p>
+					<p id="resultPValueTwoTailed">P-Value - Two-Tailed (x < -z or x > z):</p>
+					<p id="resultPValueBetween">P-Value - Between (-z < x < z):</p>
 				</div>
 			</div>
 		</div>
@@ -38,4 +38,31 @@
 	<p></p>
 </div>
 
+<div>
+	<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInverseNormalDistribution" aria-expanded="false" aria-controls="collapseInverseNormalDistribution">
+		<h4>Inverse Normal Distribution (p, μ, σ)</h4>
+	</button>
+	<div class="collapse" id="collapseInverseNormalDistribution">
+		<div class="card card-body">
+			<div class="form-group">
+				<div>
+					<label for="inputInverseNormalDistributionProbability" class="control-label">Probability (p):</label>
+					<input id="inputInverseNormalDistributionProbability" class="form-control">
+					<label for="inputInverseNormalDistributionPopulationMean" class="control-label">Population Mean (μ):</label>
+					<input id="inputInverseNormalDistributionPopulationMean" class="form-control">
+					<label for="inputInverseNormalDistributionPopulationStandardDeviation" class="control-label">Population Standard Deviation (σ):</label>
+					<input id="inputInverseNormalDistributionPopulationStandardDeviation" class="form-control">
+					<button id="calculateInverseNormalDistributionButton" class="btn btn-primary">Calculate Inverse Normal Distribution</button>
+					<button id="clearInverseNormalDistributionButton" class="btn btn-danger">Clear Inverse Normal Distribution Entries</button>
+				</div>
+
+				<div>
+					<span id="errorInverseNormalDistribution" class="text-danger">*</span>
+					<p id="resultInverseNormalDistribution">Normal Distribution:</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p></p>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>

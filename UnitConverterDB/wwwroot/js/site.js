@@ -55,6 +55,13 @@ const resultPValueRightTailedElement = document.getElementById("resultPValueRigh
 const resultPValueTwoTailedElement = document.getElementById("resultPValueTwoTailed");
 const resultPValueBetweenElement = document.getElementById("resultPValueBetween");
 
+const inputInverseNormalDistributionProbabilityElement = document.getElementById("inputInverseNormalDistributionProbability");
+const inputInverseNormalDistributionPopulationMeanElement = document.getElementById("inputInverseNormalDistributionPopulationMean");
+const inputInverseNormalDistributionPopulationStandardDeviationElement = document.getElementById("inputInverseNormalDistributionPopulationStandardDeviation");
+const calculateInverseNormalDistributionButtonElement = document.getElementById("calculateInverseNormalDistributionButton");
+const clearInverseNormalDistributionButtonElement = document.getElementById("clearInverseNormalDistributionButton");
+const errorInverseNormalDistributionElement = document.getElementById("errorInverseNormalDistribution");
+const resultInverseNormalDistributionElement = document.getElementById("resultInverseNormalDistribution");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
@@ -193,7 +200,8 @@ function checkStatisticsCalculatorsSupport() {
     if (currentPage === VALID_PAGE) {
         calculateZScoreButtonElement.addEventListener("click", calculateZScore);
         clearZScoreButtonElement.addEventListener("click", clearZScore);
-        clearButtonElement.addEventListener("click", clearInput);
+        calculateInverseNormalDistributionButtonElement.addEventListener("click", calculateInverseNormalDistribution);
+        clearInverseNormalDistributionButtonElement.addEventListener("click", clearInverseNormalDistribution);
     }
 
     function clearZScore() {
@@ -208,6 +216,13 @@ function checkStatisticsCalculatorsSupport() {
         resultPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -z or x > z):`;
         resultPValueBetweenElement.textContent = `P-Value - Between (-z < x < z):`;
     }
+
+    function clearInverseNormalDistribution() {
+        inputInverseNormalDistributionProbabilityElement.value = null;
+        inputInverseNormalDistributionPopulationMeanElement.value = null;
+        inputInverseNormalDistributionPopulationStandardDeviationElement.value = null;
+        errorInverseNormalDistributionElement.textContent = `*`;
+        resultInverseNormalDistribution.textContent = `Normal Distribution:`;
 }
 
 /**
@@ -754,6 +769,39 @@ function getPValues(z) {
 }
 
 /**
+ * Calculate the Inverse Normal Distribution using Probability (p), Population Mean (μ),
+ * and Population Standard Deviation (σ), and calculate the corresponding value in
+ * the Normal Distribution.
+ */
+function calculateInverseNormalDistribution() {
+    // Clear any error messages.
+    errorInverseNormalDistributionElement.textContent = `*`;
+
+    // Parse the input values.
+    const p = parseFloat(inputInverseNormalDistributionProbabilityElement.value);
+    const populationMean = parseFloat(inputInverseNormalDistributionPopulationMeanElement.value);
+    const populationStandardDeviation = parseFloat(inputInverseNormalDistributionPopulationStandardDeviationElement.value);
+
+    // Check that the probability (p) input value is between 0 an 1.
+    if (p < 0 || p > 1) {
+        errorInverseNormalDistributionElement.textContent = "Probability (p) must be between 0 and 1.";
+        return;
+    }
+    // Check that all the input fields contain valid numbers.
+    else if (isNaN(p) || isNaN(populationMean) || isNaN(populationStandardDeviation)) {
+        errorInverseNormalDistributionElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the z-score for the given probability using jStat.
+    const z = jStat.normal.inv(p, 0, 1);
+
+    // Calculate the inverse normal distribution value.
+    const resultInverseNormalDistribution = populationMean + z * populationStandardDeviation;
+
+    // Display the Normal Distribution result and remove any trailing zeros.
+    resultInverseNormalDistributionElement.textContent = `Normal Distribution: ${resultInverseNormalDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
+}
  * Check if the input(s) contains valid numbers.
  * If n = 0, for the Statistics page.
  * If n = 1, for the GetZScore page.
