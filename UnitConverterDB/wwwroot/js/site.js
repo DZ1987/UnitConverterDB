@@ -243,7 +243,7 @@ function checkStatisticsCalculatorsSupport() {
         inputInverseNormalDistributionPopulationStandardDeviationElement.value = null;
         errorInverseNormalDistributionElement.textContent = `*`;
         resultInverseNormalDistribution.textContent = `Normal Distribution:`;
-}
+    }
 
     function clearInverseTDistribution() {
         inputInverseTDistributionProbabilityElement.value = null;
@@ -260,6 +260,8 @@ function checkStatisticsCalculatorsSupport() {
         resultEmpiricalRule95Element.textContent = `95% of the data falls between`;
         resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between`;
     }
+}
+
 /**
  * Check if on the UserNotes Index page only.
  */
@@ -898,6 +900,8 @@ function calculateEmpiricalRule() {
     resultEmpiricalRule95Element.textContent = `95% of the data falls between ${range95[0]} to ${range95[1]} of two standard deviations.`;
     resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between ${range99_7[0]} to ${range99_7[1]} of three standard deviations.`;
 }
+
+/**
  * Check if the input(s) contains valid numbers.
  * If n = 0, for the Statistics page.
  * If n = 1, for the GetZScore page.
