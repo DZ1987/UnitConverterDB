@@ -20,7 +20,7 @@ namespace UnitConverterDB.Controllers
         }
 
         // GET: GetZScore
-        public async Task<IActionResult> GetZScore()
+        public async Task<IActionResult> StatisticsCalculators()
         {
             return View(await _context.Statistics.ToListAsync());
         }

@@ -41,25 +41,50 @@ const numOutliersElement = document.getElementById("numOutliers");
 const numFiveNumberSummaryElement = document.getElementById("numFiveNumberSummary");
 
 
-// Document Object Model(DOM) elements: GetZScore page.
+// Document Object Model(DOM) elements: Statistics Calculators page.
 const inputZScoreXElement = document.getElementById("inputZScoreX");
-const inputZScoreMeanElement = document.getElementById("inputZScoreMean");
-const inputZScoreDeviationElement = document.getElementById("inputZScoreDeviation");
-const getZScoreButtonElement = document.getElementById("getZScoreButton");
-const numXElement = document.getElementById("numX");
-const numZScoreElement = document.getElementById("numZScore");
-const numPValueLeftTailedElement = document.getElementById("numPValueLeftTailed");
-const numPValueRightTailedElement = document.getElementById("numPValueRightTailed");
-const numPValueTwoTailedElement = document.getElementById("numPValueTwoTailed");
-const numPValueBetweenElement = document.getElementById("numPValueBetween");
+const inputZScorePopulationMeanElement = document.getElementById("inputZScorePopulationMean");
+const inputZScorePopulationStandardDeviationElement = document.getElementById("inputZScorePopulationStandardDeviation");
+const calculateZScoreButtonElement = document.getElementById("calculateZScoreButton");
+const clearZScoreButtonElement = document.getElementById("clearZScoreButton");
+const errorZScoreElement = document.getElementById("errorZScore");
+const resultXElement = document.getElementById("resultX");
+const resultZScoreElement = document.getElementById("resultZScore");
+const resultPValueLeftTailedElement = document.getElementById("resultPValueLeftTailed");
+const resultPValueRightTailedElement = document.getElementById("resultPValueRightTailed");
+const resultPValueTwoTailedElement = document.getElementById("resultPValueTwoTailed");
+const resultPValueBetweenElement = document.getElementById("resultPValueBetween");
 
+const inputInverseNormalDistributionProbabilityElement = document.getElementById("inputInverseNormalDistributionProbability");
+const inputInverseNormalDistributionPopulationMeanElement = document.getElementById("inputInverseNormalDistributionPopulationMean");
+const inputInverseNormalDistributionPopulationStandardDeviationElement = document.getElementById("inputInverseNormalDistributionPopulationStandardDeviation");
+const calculateInverseNormalDistributionButtonElement = document.getElementById("calculateInverseNormalDistributionButton");
+const clearInverseNormalDistributionButtonElement = document.getElementById("clearInverseNormalDistributionButton");
+const errorInverseNormalDistributionElement = document.getElementById("errorInverseNormalDistribution");
+const resultInverseNormalDistributionElement = document.getElementById("resultInverseNormalDistribution");
+
+const inputInverseTDistributionProbabilityElement = document.getElementById("inputInverseTDistributionProbability");
+const inputInverseTDistributionDegreesOfFreedomElement = document.getElementById("inputInverseTDistributionDegreesOfFreedom");
+const calculateInverseTDistributionButtonElement = document.getElementById("calculateInverseTDistributionButton");
+const clearInverseTDistributionButtonElement = document.getElementById("clearInverseTDistributionButton");
+const errorInverseTDistributionElement = document.getElementById("errorInverseTDistribution");
+const resultInverseTDistributionElement = document.getElementById("resultInverseTDistribution");
+
+const inputEmpiricalRulePopulationMeanElement = document.getElementById("inputEmpiricalRulePopulationMean");
+const inputEmpiricalRulePopulationStandardDeviationElement = document.getElementById("inputEmpiricalRulePopulationStandardDeviation");
+const calculateEmpiricalRuleButtonElement = document.getElementById("calculateEmpiricalRuleButton");
+const clearEmpiricalRuleButtonElement = document.getElementById("clearEmpiricalRuleButton");
+const errorEmpiricalRuleElement = document.getElementById("errorEmpiricalRule");
+const resultEmpiricalRule68Element = document.getElementById("resultEmpiricalRule68");
+const resultEmpiricalRule95Element = document.getElementById("resultEmpiricalRule95");
+const resultEmpiricalRule99_7Element = document.getElementById("resultEmpiricalRule99_7");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
     checkTextAreaSupport();
     checkConversionSupport();
     checkStatisticsSupport();
-    checkGetZScoreSupport();
+    checkStatisticsCalculatorsSupport();
 });
 
 /**
@@ -180,33 +205,61 @@ function checkStatisticsSupport() {
 }
 
 /**
-* Check if on the GetZScore page.
+* Check if on the Statistics Calculators page.
 */
-function checkGetZScoreSupport() {
-    const VALID_PAGE = "/Statistics/GetZScore";
+function checkStatisticsCalculatorsSupport() {
+    const VALID_PAGE = "/Statistics/StatisticsCalculators";
 
     // Get the current page path name.
     const currentPage = window.location.pathname;
 
     if (currentPage === VALID_PAGE) {
-        clearInput();
-        getZScoreButtonElement.addEventListener("click", getZScore);
-        clearButtonElement.addEventListener("click", clearInput);
+        calculateZScoreButtonElement.addEventListener("click", calculateZScore);
+        clearZScoreButtonElement.addEventListener("click", clearZScore);
+        calculateInverseNormalDistributionButtonElement.addEventListener("click", calculateInverseNormalDistribution);
+        clearInverseNormalDistributionButtonElement.addEventListener("click", clearInverseNormalDistribution);
+        calculateInverseTDistributionButtonElement.addEventListener("click", calculateInverseTDistribution);
+        clearInverseTDistributionButtonElement.addEventListener("click", clearInverseTDistribution);
+        calculateEmpiricalRuleButtonElement.addEventListener("click", calculateEmpiricalRule);
+        clearEmpiricalRuleButtonElement.addEventListener("click", clearEmpiricalRule);
     }
 
-    function clearInput() {
+    function clearZScore() {
         inputZScoreXElement.value = null;
-        inputZScoreMeanElement.value = null;
-        inputZScoreDeviationElement.value = null;
-        numXElement.textContent = `Sample (x):`;
-        numZScoreElement.textContent = `Z-Score (Z):`;
-        numPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < Z):`;
-        numPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > Z):`;
-        numPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -Z or x > Z)`;
-        numPValueBetweenElement.textContent = `P-Value - Between (-Z < x < Z):`;
+        inputZScorePopulationMeanElement.value = null;
+        inputZScorePopulationStandardDeviationElement.value = null;
+        errorZScoreElement.textContent = `*`;
+        resultXElement.textContent = `Raw Score (x):`;
+        resultZScoreElement.textContent = `Z-Score (z):`;
+        resultPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < z):`;
+        resultPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > z):`;
+        resultPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -z or x > z):`;
+        resultPValueBetweenElement.textContent = `P-Value - Between (-z < x < z):`;
     }
+
+    function clearInverseNormalDistribution() {
+        inputInverseNormalDistributionProbabilityElement.value = null;
+        inputInverseNormalDistributionPopulationMeanElement.value = null;
+        inputInverseNormalDistributionPopulationStandardDeviationElement.value = null;
+        errorInverseNormalDistributionElement.textContent = `*`;
+        resultInverseNormalDistribution.textContent = `Normal Distribution:`;
 }
 
+    function clearInverseTDistribution() {
+        inputInverseTDistributionProbabilityElement.value = null;
+        inputInverseTDistributionDegreesOfFreedomElement.value = null;
+        errorInverseTDistributionElement.textContent = `*`;
+        resultInverseTDistributionElement.textContent = `T-Score:`;
+    }
+
+    function clearEmpiricalRule() {
+        inputEmpiricalRulePopulationMeanElement.value = null;
+        inputEmpiricalRulePopulationStandardDeviationElement.value = null;
+        errorEmpiricalRuleElement.textContent = `*`;
+        resultEmpiricalRule68Element.textContent = `68% of the data falls between`;
+        resultEmpiricalRule95Element.textContent = `95% of the data falls between`;
+        resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between`;
+    }
 /**
  * Check if on the UserNotes Index page only.
  */
@@ -708,48 +761,143 @@ function getStatistics() {
 
 
 /**
- * Get the z-score from the sample, mean, and standard deviation
+ * Calculate the z-score from the sample, mean, and standard deviation
  * then get the p-values.
  */
-function getZScore() {
+function calculateZScore() {
+    errorZScoreElement.textContent = `*`;
 
-    if (validNumbers(1)) {
-        let x = inputZScoreXElement.value;
-        let mean = inputZScoreMeanElement.value;
-        let deviation = inputZScoreDeviationElement.value;
-        let zScore = (x - mean) / deviation;
+    const x = parseFloat(inputZScoreXElement.value);
+    const populationMean = parseFloat(inputZScorePopulationMeanElement.value);
+    const populationStandardDeviation = parseFloat(inputZScorePopulationStandardDeviationElement.value);
+    const z = (x - populationMean) / populationStandardDeviation;
+
+    if (isNaN(x) || isNaN(populationMean) || isNaN(populationStandardDeviation)) {
+        errorZScoreElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
 
         // Display the Z-Score result on the webpage.
-        numXElement.textContent = `Sample (x) = ${x}`;
-        numZScoreElement.textContent = `Z-Score (Z) = ${zScore}`;
+    resultXElement.textContent = `Raw Score (x) = ${x}`;
+    resultZScoreElement.textContent = `Z-Score (z) = ${z.toFixed(6).replace(/\.?0+$/, '')}`;
 
-        getPValues(zScore);
-    }
-    else {
-        alert("Enter some numbers.");
-    }
+    getPValues(z);
 }
 
 /**
- * Get the p-value from the z-score.
+ * Get the p-values from the z-score.
  */
-function getPValues(zScore) {
+function getPValues(z) {
     // Calculates the Cumulative Distribution Function (CDF) for the z-score.
-    const cdf = jStat.normal.cdf(zScore, 0, 1);
+    const cdfZScore = jStat.normal.cdf(z, 0, 1);
 
-    const pValueLeftTailed = cdf;
-    const pValueRightTailed = 1 - cdf;
-    const pValueTwoTailed = 2 * (1 - jStat.normal.cdf(Math.abs(zScore), 0, 1));
+    const pValueLeftTailed = cdfZScore;
+    const pValueRightTailed = 1 - cdfZScore;
+    const pValueTwoTailed = 2 * (1 - jStat.normal.cdf(Math.abs(z), 0, 1));
     const pValueBetween = 1 - pValueTwoTailed;
 
     // Display the P-Value results on the webpage.
-    numPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < Z): ${pValueLeftTailed}`;
-    numPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > Z): ${pValueRightTailed}`;
-    numPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -Z or x > Z): ${pValueTwoTailed}`;
-    numPValueBetweenElement.textContent = `P-Value - Between (-Z < x < Z): ${pValueBetween}`;
+    resultPValueLeftTailedElement.textContent = `P-Value - Left-Tailed (x < z): ${pValueLeftTailed.toFixed(6).replace(/\.?0+$/, '')}`;
+    resultPValueRightTailedElement.textContent = `P-Value - Right-Tailed (x > z): ${pValueRightTailed.toFixed(6).replace(/\.?0+$/, '')}`;
+    resultPValueTwoTailedElement.textContent = `P-Value - Two-Tailed (x < -z or x > z): ${pValueTwoTailed.toFixed(6).replace(/\.?0+$/, '')}`;
+    resultPValueBetweenElement.textContent = `P-Value - Between (-z < x < z): ${pValueBetween.toFixed(6).replace(/\.?0+$/, '')}`;
 }
 
 /**
+ * Calculate the Inverse Normal Distribution using Probability (p), Population Mean (μ),
+ * and Population Standard Deviation (σ), and calculate the corresponding value in
+ * the Normal Distribution.
+ */
+function calculateInverseNormalDistribution() {
+    // Clear any error messages.
+    errorInverseNormalDistributionElement.textContent = `*`;
+
+    // Parse the input values.
+    const p = parseFloat(inputInverseNormalDistributionProbabilityElement.value);
+    const populationMean = parseFloat(inputInverseNormalDistributionPopulationMeanElement.value);
+    const populationStandardDeviation = parseFloat(inputInverseNormalDistributionPopulationStandardDeviationElement.value);
+
+    // Check that the probability (p) input value is between 0 an 1.
+    if (p < 0 || p > 1) {
+        errorInverseNormalDistributionElement.textContent = "Probability (p) must be between 0 and 1.";
+        return;
+    }
+    // Check that all the input fields contain valid numbers.
+    else if (isNaN(p) || isNaN(populationMean) || isNaN(populationStandardDeviation)) {
+        errorInverseNormalDistributionElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the z-score for the given probability using jStat.
+    const z = jStat.normal.inv(p, 0, 1);
+
+    // Calculate the inverse normal distribution value.
+    const resultInverseNormalDistribution = populationMean + z * populationStandardDeviation;
+
+    // Display the Normal Distribution result and remove any trailing zeros.
+    resultInverseNormalDistributionElement.textContent = `Normal Distribution: ${resultInverseNormalDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
+}
+
+/**
+ * Calculate the Inverse T-Distribution using Probability (p) and
+ * Degrees of Freedom (df), and calculate the corresponding
+ * T-Score Value.
+ */
+function calculateInverseTDistribution() {
+    // Clear any error messages.
+    errorInverseTDistributionElement.textContent = `*`;
+
+    // Parse the input values.
+    const p = parseFloat(inputInverseTDistributionProbabilityElement.value);
+    const df = parseInt(inputInverseTDistributionDegreesOfFreedomElement.value);
+
+    // Check that the probability (p) input value is between 0 an 1.
+    if (p < 0 || p > 1) {
+        errorInverseTDistributionElement.textContent = "Probability (p) must be between 0 and 1.";
+        return;
+    }
+    // Check that all the input fields contain valid numbers.
+    else if (isNaN(p) || isNaN(p)) {
+        errorInverseTDistributionElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the t-score for the given probability (p) and degrees of freedom (df) using jStat.
+    const resultInverseTDistribution = jStat.studentt.inv(p, df);
+
+    // Display the T-Score result and remove any trailing zeros.
+    resultInverseTDistributionElement.textContent = `T-Score: ${resultInverseTDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
+}
+
+/**
+ * Calculate the ranges for the Empirical Rule using Population Mean (μ) and
+ * Population Standard Deviation (σ), and calculate the ranges for
+ * 68%, 95%, and 99.7% of the data based on the Empirical Rule.
+ */
+function calculateEmpiricalRule() {
+    // Clear any error messages.
+    errorEmpiricalRuleElement.textContent = `*`;
+
+    // Parse the input values.
+    const populationMean = parseFloat(inputEmpiricalRulePopulationMeanElement.value);
+    const populationStandardDeviation = parseFloat(inputEmpiricalRulePopulationStandardDeviationElement.value);
+
+    // Check that all the input fields contain valid numbers.
+    if (isNaN(populationMean) || isNaN(populationStandardDeviation)) {
+        errorEmpiricalRuleElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the ranges for 68%, 95%, and 99.7% of the data.
+    const range68 = [populationMean - populationStandardDeviation, populationMean + populationStandardDeviation];
+    const range95 = [populationMean - 2 * populationStandardDeviation, populationMean + 2 * populationStandardDeviation];
+    const range99_7 = [populationMean - 3 * populationStandardDeviation, populationMean + 3 * populationStandardDeviation];
+
+    // Display the Empirical Rule results.
+    resultEmpiricalRule68Element.textContent = `68% of the data falls between ${range68[0]} to ${range68[1]} of one standard deviation.`;
+    resultEmpiricalRule95Element.textContent = `95% of the data falls between ${range95[0]} to ${range95[1]} of two standard deviations.`;
+    resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between ${range99_7[0]} to ${range99_7[1]} of three standard deviations.`;
+}
  * Check if the input(s) contains valid numbers.
  * If n = 0, for the Statistics page.
  * If n = 1, for the GetZScore page.
@@ -768,8 +916,8 @@ function validNumbers(n) {
     }
     else if (n === 1) { // GetZScore page.
         let checkNumbers1 = inputZScoreXElement.value;
-        let checkNumbers2 = inputZScoreMeanElement.value;
-        let checkNumbers3 = inputZScoreDeviationElement.value;
+        let checkNumbers2 = inputZScorePopulationMeanElement.value;
+        let checkNumbers3 = inputZScorePopulationStandardDeviationElement.value;
 
         // Check if any of the inputs are empty or not numbers.
         return [checkNumbers1, checkNumbers2, checkNumbers3].every(num => num !== "" && !isNaN(Number(num)));
