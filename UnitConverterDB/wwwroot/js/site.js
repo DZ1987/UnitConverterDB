@@ -62,6 +62,13 @@ const calculateInverseNormalDistributionButtonElement = document.getElementById(
 const clearInverseNormalDistributionButtonElement = document.getElementById("clearInverseNormalDistributionButton");
 const errorInverseNormalDistributionElement = document.getElementById("errorInverseNormalDistribution");
 const resultInverseNormalDistributionElement = document.getElementById("resultInverseNormalDistribution");
+
+const inputInverseTDistributionProbabilityElement = document.getElementById("inputInverseTDistributionProbability");
+const inputInverseTDistributionDegreesOfFreedomElement = document.getElementById("inputInverseTDistributionDegreesOfFreedom");
+const calculateInverseTDistributionButtonElement = document.getElementById("calculateInverseTDistributionButton");
+const clearInverseTDistributionButtonElement = document.getElementById("clearInverseTDistributionButton");
+const errorInverseTDistributionElement = document.getElementById("errorInverseTDistribution");
+const resultInverseTDistributionElement = document.getElementById("resultInverseTDistribution");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
@@ -202,6 +209,8 @@ function checkStatisticsCalculatorsSupport() {
         clearZScoreButtonElement.addEventListener("click", clearZScore);
         calculateInverseNormalDistributionButtonElement.addEventListener("click", calculateInverseNormalDistribution);
         clearInverseNormalDistributionButtonElement.addEventListener("click", clearInverseNormalDistribution);
+        calculateInverseTDistributionButtonElement.addEventListener("click", calculateInverseTDistribution);
+        clearInverseTDistributionButtonElement.addEventListener("click", clearInverseTDistribution);
     }
 
     function clearZScore() {
@@ -225,6 +234,12 @@ function checkStatisticsCalculatorsSupport() {
         resultInverseNormalDistribution.textContent = `Normal Distribution:`;
 }
 
+    function clearInverseTDistribution() {
+        inputInverseTDistributionProbabilityElement.value = null;
+        inputInverseTDistributionDegreesOfFreedomElement.value = null;
+        errorInverseTDistributionElement.textContent = `*`;
+        resultInverseTDistributionElement.textContent = `T-Score:`;
+    }
 /**
  * Check if on the UserNotes Index page only.
  */
@@ -801,6 +816,37 @@ function calculateInverseNormalDistribution() {
 
     // Display the Normal Distribution result and remove any trailing zeros.
     resultInverseNormalDistributionElement.textContent = `Normal Distribution: ${resultInverseNormalDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
+}
+
+/**
+ * Calculate the Inverse T-Distribution using Probability (p) and
+ * Degrees of Freedom (df), and calculate the corresponding
+ * T-Score Value.
+ */
+function calculateInverseTDistribution() {
+    // Clear any error messages.
+    errorInverseTDistributionElement.textContent = `*`;
+
+    // Parse the input values.
+    const p = parseFloat(inputInverseTDistributionProbabilityElement.value);
+    const df = parseInt(inputInverseTDistributionDegreesOfFreedomElement.value);
+
+    // Check that the probability (p) input value is between 0 an 1.
+    if (p < 0 || p > 1) {
+        errorInverseTDistributionElement.textContent = "Probability (p) must be between 0 and 1.";
+        return;
+    }
+    // Check that all the input fields contain valid numbers.
+    else if (isNaN(p) || isNaN(p)) {
+        errorInverseTDistributionElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the t-score for the given probability (p) and degrees of freedom (df) using jStat.
+    const resultInverseTDistribution = jStat.studentt.inv(p, df);
+
+    // Display the T-Score result and remove any trailing zeros.
+    resultInverseTDistributionElement.textContent = `T-Score: ${resultInverseTDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
 }
  * Check if the input(s) contains valid numbers.
  * If n = 0, for the Statistics page.

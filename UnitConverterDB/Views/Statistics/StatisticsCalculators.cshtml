@@ -65,4 +65,30 @@
 	</div>
 	<p></p>
 </div>
+
+<div>
+	<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInverseTDistribution" aria-expanded="false" aria-controls="collapseInverseTDistribution">
+		<h4>Inverse T-Distribution (p, df)</h4>
+	</button>
+	<div class="collapse" id="collapseInverseTDistribution">
+		<div class="card card-body">
+			<div class="form-group">
+				<div>
+					<label for="inputInverseTDistributionProbability" class="control-label">Probability (p):</label>
+					<input id="inputInverseTDistributionProbability" class="form-control">
+					<label for="inputInverseTDistributionDegreesOfFreedom" class=" control-label">Degrees of Freedom (df):</label>
+					<input id="inputInverseTDistributionDegreesOfFreedom" class="form-control">
+					<button id="calculateInverseTDistributionButton" class="btn btn-primary">Calculate Inverse T-Distribution</button>
+					<button id="clearInverseTDistributionButton" class="btn btn-danger">Clear Inverse T-Distribution Entries</button>
+				</div>
+
+				<div>
+					<span id="errorInverseTDistribution" class="text-danger">*</span>
+					<p id="resultInverseTDistribution">T-Score:</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p></p>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
