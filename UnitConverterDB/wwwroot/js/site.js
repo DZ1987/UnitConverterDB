@@ -69,6 +69,15 @@ const calculateInverseTDistributionButtonElement = document.getElementById("calc
 const clearInverseTDistributionButtonElement = document.getElementById("clearInverseTDistributionButton");
 const errorInverseTDistributionElement = document.getElementById("errorInverseTDistribution");
 const resultInverseTDistributionElement = document.getElementById("resultInverseTDistribution");
+
+const inputEmpiricalRulePopulationMeanElement = document.getElementById("inputEmpiricalRulePopulationMean");
+const inputEmpiricalRulePopulationStandardDeviationElement = document.getElementById("inputEmpiricalRulePopulationStandardDeviation");
+const calculateEmpiricalRuleButtonElement = document.getElementById("calculateEmpiricalRuleButton");
+const clearEmpiricalRuleButtonElement = document.getElementById("clearEmpiricalRuleButton");
+const errorEmpiricalRuleElement = document.getElementById("errorEmpiricalRule");
+const resultEmpiricalRule68Element = document.getElementById("resultEmpiricalRule68");
+const resultEmpiricalRule95Element = document.getElementById("resultEmpiricalRule95");
+const resultEmpiricalRule99_7Element = document.getElementById("resultEmpiricalRule99_7");
 document.addEventListener("DOMContentLoaded", function () {
     updateIconsPath();
     checkAccordionSupport();
@@ -211,6 +220,8 @@ function checkStatisticsCalculatorsSupport() {
         clearInverseNormalDistributionButtonElement.addEventListener("click", clearInverseNormalDistribution);
         calculateInverseTDistributionButtonElement.addEventListener("click", calculateInverseTDistribution);
         clearInverseTDistributionButtonElement.addEventListener("click", clearInverseTDistribution);
+        calculateEmpiricalRuleButtonElement.addEventListener("click", calculateEmpiricalRule);
+        clearEmpiricalRuleButtonElement.addEventListener("click", clearEmpiricalRule);
     }
 
     function clearZScore() {
@@ -239,6 +250,15 @@ function checkStatisticsCalculatorsSupport() {
         inputInverseTDistributionDegreesOfFreedomElement.value = null;
         errorInverseTDistributionElement.textContent = `*`;
         resultInverseTDistributionElement.textContent = `T-Score:`;
+    }
+
+    function clearEmpiricalRule() {
+        inputEmpiricalRulePopulationMeanElement.value = null;
+        inputEmpiricalRulePopulationStandardDeviationElement.value = null;
+        errorEmpiricalRuleElement.textContent = `*`;
+        resultEmpiricalRule68Element.textContent = `68% of the data falls between`;
+        resultEmpiricalRule95Element.textContent = `95% of the data falls between`;
+        resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between`;
     }
 /**
  * Check if on the UserNotes Index page only.
@@ -847,6 +867,36 @@ function calculateInverseTDistribution() {
 
     // Display the T-Score result and remove any trailing zeros.
     resultInverseTDistributionElement.textContent = `T-Score: ${resultInverseTDistribution.toFixed(6).replace(/\.?0+$/, '')}`;
+}
+
+/**
+ * Calculate the ranges for the Empirical Rule using Population Mean (μ) and
+ * Population Standard Deviation (σ), and calculate the ranges for
+ * 68%, 95%, and 99.7% of the data based on the Empirical Rule.
+ */
+function calculateEmpiricalRule() {
+    // Clear any error messages.
+    errorEmpiricalRuleElement.textContent = `*`;
+
+    // Parse the input values.
+    const populationMean = parseFloat(inputEmpiricalRulePopulationMeanElement.value);
+    const populationStandardDeviation = parseFloat(inputEmpiricalRulePopulationStandardDeviationElement.value);
+
+    // Check that all the input fields contain valid numbers.
+    if (isNaN(populationMean) || isNaN(populationStandardDeviation)) {
+        errorEmpiricalRuleElement.textContent = "Please enter valid numbers for all fields.";
+        return;
+    }
+
+    // Calculate the ranges for 68%, 95%, and 99.7% of the data.
+    const range68 = [populationMean - populationStandardDeviation, populationMean + populationStandardDeviation];
+    const range95 = [populationMean - 2 * populationStandardDeviation, populationMean + 2 * populationStandardDeviation];
+    const range99_7 = [populationMean - 3 * populationStandardDeviation, populationMean + 3 * populationStandardDeviation];
+
+    // Display the Empirical Rule results.
+    resultEmpiricalRule68Element.textContent = `68% of the data falls between ${range68[0]} to ${range68[1]} of one standard deviation.`;
+    resultEmpiricalRule95Element.textContent = `95% of the data falls between ${range95[0]} to ${range95[1]} of two standard deviations.`;
+    resultEmpiricalRule99_7Element.textContent = `99.7% of the data falls between ${range99_7[0]} to ${range99_7[1]} of three standard deviations.`;
 }
  * Check if the input(s) contains valid numbers.
  * If n = 0, for the Statistics page.

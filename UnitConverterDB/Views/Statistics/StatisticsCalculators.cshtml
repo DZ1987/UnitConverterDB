@@ -91,4 +91,32 @@
 	</div>
 	<p></p>
 </div>
+
+<div>
+	<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmpiricalRule" aria-expanded="false" aria-controls="collapseEmpiricalRule">
+		<h4>Empirical Rule (μ, σ)</h4>
+	</button>
+	<div class="collapse" id="collapseEmpiricalRule">
+		<div class="card card-body">
+			<div class="form-group">
+				<div>
+					<label for="inputEmpiricalRulePopulationMean" class="control-label">Population Mean (μ):</label>
+					<input id="inputEmpiricalRulePopulationMean" class="form-control">
+					<label for="inputEmpiricalRulePopulationStandardDeviation" class="control-label">Population Standard Deviation (σ):</label>
+					<input id="inputEmpiricalRulePopulationStandardDeviation" class="form-control">
+					<button id="calculateEmpiricalRuleButton" class="btn btn-primary">Calculate Empirical Rule</button>
+					<button id="clearEmpiricalRuleButton" class="btn btn-danger">Clear Empirical Rule Entries</button>
+				</div>
+
+				<div>
+					<span id="errorEmpiricalRule" class="text-danger">*</span>
+					<p id="resultEmpiricalRule68">68% of the data falls between</p>
+					<p id="resultEmpiricalRule95">95% of the data falls between</p>
+					<p id="resultEmpiricalRule99_7">99.7% of the data falls between</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p></p>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
